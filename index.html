@@ -111,6 +111,22 @@
         overflow: hidden;
       }
 
+      #bg-img2 {
+        background-image: url('https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/3abd2d48548fb5f6829e66c5a41ac51914164f96/img/banner_bg.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: top;
+        overflow: hidden;
+      }
+
+      #title-img2 {
+        background-image: url('https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/3abd2d48548fb5f6829e66c5a41ac51914164f96/img/banner_title.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: top;
+        overflow: hidden;
+      }
+
   </style>
 </head>
 
@@ -445,11 +461,11 @@
         <!--头图-->
         <div style="width: 375px; height: 667px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor3)">
           <!--头图背景-->
-          <div  id="bg-img" style="width: 375px; height: 95px; left: 0px; top: 0px; position: absolute ">
+          <div  id="bg-img2" style="width: 375px; height: 95px; left: 0px; top: 0px; position: absolute ">
             
           </div>
           <!--头图标题-->
-          <div id="title-img"  style="width: 375px; height: 95px; left: 0px; top: 0px; position: absolute">
+          <div id="title-img2"  style="width: 375px; height: 95px; left: 0px; top: 0px; position: absolute">
             
           </div>
           <div style="width: 375px; height: 28px; left: 0px; top: 67px; position: absolute">
@@ -802,6 +818,7 @@
     //上传背景图
     const uploadInput = document.getElementById('imageInput');
     const myDiv = document.getElementById('bg-img');
+    const myDiv3 = document.getElementById('bg-img2');
 
     uploadInput.addEventListener('change', function() {
       const file = this.files[0];
@@ -809,6 +826,7 @@
 
       reader.onload = function(e) {
         myDiv.style.backgroundImage = `url(${e.target.result})`;
+        myDiv3.style.backgroundImage = `url(${e.target.result})`;
       };
 
       reader.readAsDataURL(file);
@@ -817,6 +835,7 @@
     //上传标题图
     const uploadInput2 = document.getElementById('imageInput2');
     const myDiv2 = document.getElementById('title-img');
+    const myDiv4 = document.getElementById('title-img2');
 
     uploadInput2.addEventListener('change', function() {
       const file = this.files[0];
@@ -824,6 +843,7 @@
 
       reader.onload = function(e) {
         myDiv2.style.backgroundImage = `url(${e.target.result})`;
+        myDiv4.style.backgroundImage = `url(${e.target.result})`;
       };
 
       reader.readAsDataURL(file);
