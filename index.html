@@ -11,6 +11,10 @@
         --bgcolor2:hsl(230,60%,40%);
         --bgcolor3:hsl(230,60%,56%);
         --bgcolor4:hsl(230,70%,32%);
+        --switch1:#707070;
+        --switch2:#ffffff;
+        --switch3:#000000;
+        --switch4:#e3ca26;
       }
 
       .color-1{
@@ -53,12 +57,14 @@
         font-size: 14px;
         text-align: left;
         color: #ffffff;
+        font-weight: 500;
       }
 
       .text-3{
         font-size: 14px;
         text-align: left;
         color: #af2c2c;
+        font-weight: 500;
       }
 
       .button {
@@ -127,713 +133,814 @@
         overflow: hidden;
       }
 
+      .tips2{
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+      }
+
+      .tips2 .tips2text{
+        visibility: hidden;
+        width: 120px;
+        background-color: #000000d0;
+        color: #ffffffac;
+        text-align: left;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        top: 30px;
+        left: 30%;
+        transform: translateX(-80%);
+        opacity: 1;
+        transition: opacity 0.3s;
+      }
+
+      .tips2:hover .tips2text{
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .tips3{
+        padding: 10px;
+        background-color: #000000ba;
+        color: #fff; 
+        z-index: 1;
+        bottom: 50%; 
+        position: absolute;
+        font-size: 12px;
+        border-radius: 10px; 
+      }
+
+      .theme-switch {
+        position: absolute;
+        display: inline-block;
+        width: 32px;
+        height: 14px;
+        background-color:var(--switch1);
+        border-radius: 17px;
+        margin-top: 0px;
+      }
+
+      .theme-switch::before {        
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: var(--switch2);
+        top: 2px;
+        left: 2px;
+        transition: transform 0.3s;
+      }
+
+      .safa-switch {
+        position: absolute;
+        display: inline-block;
+        color:var(--switch3);
+        background-color: var(--switch4); 
+        border-radius:0px 4px 4px 0px;
+        
+      }
+
+      
+
+      input[type="checkbox"] {
+        display: none;
+      }
+
+      input[type="checkbox"]:checked + .theme-switch::before {
+        transform: translateX(18px);
+      }
+
+      input[type="checkbox"]:checked + .safa-switch::before {
+        transform: translatey(10px);
+      }
+
+      @keyframes tipsPickup {
+        0%{
+          opacity: 0;
+          transform: translatey(50%);
+        }
+        30%{
+          opacity: 1;
+          transform: translatey(0);
+        }
+        100%{
+          opacity: 1;
+        }
+        
+      }
+
   </style>
 </head>
 
-<body>
+<body style=" font-family:Source Han Sans CN, PingFang SC,Arial, sans-serif; display: flex; justify-content: center;">
 
-    <!--display: none;-->
-  <div id="export-img" style="width: 1150px; height: 840px; top: 30px; left:30px; position: relative; transform: scale(0.85); transform-origin: left top;">
-    <div  style="width: 1150px; height: 840px; top: 0px; left:0px; background: #a6a6a6; position: relative;">
-        <div  style="width: 1150px; height: 560px; top: 0px; left:0px; display: flex; justify-content: space-between; position: relative ">
-        
-            <!--配色表-->
-            <div style="width: 500px; height: 640px; top: 10px; left:12px;">
-            <div style="width: 420px; height: 22px; top: 10px; left:10px; font-size:20px;font-weight: 600; display: flex; justify-content: left; position: relative" >页面配色表</div>
-            <div style="width: 420px; height: 30px; top: 10px; left:0px;display: flex; justify-content: left; position: relative" class="text-3" >（红色部分为固定色值）</div>
-            <div style="width: 420px; height: 60px; top: 10px; left:10px; display: flex; justify-content:left; position: relative">
-                <div class="color-box" style="background: #ffffff;"></div>
-                <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1" style="opacity: 0.5;">fontColor1：普通文字颜色 </div>
-                <div> <span class="text-3">#ffffff </span> </div>
+  
+  <div  style="width: 920px; height: auto; border: 1px solid #000000;border-radius: 10px; background: #e9e9e9; overflow: hidden;">
+    <div id="pickertips" class="tips3" style="display: none;">当前颜色较亮,建议使用暗字色主题~</div>
+    
+    <!--tab栏-->
+    <div style="width: 920px; height: 30px; display: flex; justify-content: space-between; align-items: center; position:relative;">
+        <!--主题开关-->
+        <div style="width: 28px; height: 14px;position: absolute; right: 10px; ">
+            <input type="checkbox" id="themeSwitch" ></input>
+            <label for="themeSwitch" class="theme-switch">
+            </label>
+        </div>  
+    </div>
+    <!--配色表导出-->
+    <div id="tab1" style="width: 920px; height: 672px;">
+        <!--缩放显示-->
+        <div id="export-img" style="width: 1150px; height: 840px; top: 0px; left:0px; background: #a6a6a6; position: relative; transform: scale(0.8); transform-origin: left top;">
+            <div  style="width: 1150px; height: 560px;  display: flex; justify-content: space-between; position: relative; ">           
+                <!--页面配色表-->
+                <div style="width: 400px; height: 640px; margin: 10px;">
+                    <div style="width:auto; height: 22px; padding: 4px;  font-size:20px;font-weight: 600; display: flex; justify-content: left; align-items:baseline;" >
+                        页面配色表<span class="text-3" >（红色部分为固定色值）</span>
+                    </div>
+                    <!--详细-->
+                    <div style="width: 420px;margin: 10px 0px 10px 4px;">
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                            <div class="color-box" style="background: #ffffff;"></div>
+                            <div style="margin-left: 10px;">
+                                <div class="text-1" style="opacity: 0.5; height: 20px" >fontColor1：普通文字颜色 </div>
+                                <span class="text-3">#ffffff </span>
+                            </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left;align-items: center;">
+                            <div class="color-box" style="background: #ffff7d;"></div>
+                            <div style="margin-left: 10px;">
+                                <div class="text-1" style="opacity: 0.5; height: 20px">fontColor2：强调文字颜色（昵称、标题、称号） </div>
+                                <span class="text-3">#ffff7d </span>
+                            </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                            <div class="color-box" style="background: #ffff7d;"></div>
+                            <div style="margin-left: 10px;">
+                                <div class="text-1" style="opacity: 0.5; height: 20px">fontColor3：辅助文字颜色 </div>
+                                <span class="text-3">#ffff7d </span>
+                            </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                            <div class="color-box" style="background: #07082c;"></div>
+                            <div style="margin-left: 10px;">
+                                <div class="text-1" style="opacity: 0.5; height: 20px">fontColor4：辅助文字颜色 </div>
+                                <span class="text-3">#07082c </span>
+                            </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left;align-items: center; ">
+                            <div id="color-box1" class="color-box color-1 "></div>
+                            <div style="margin-left: 10px;">
+                                <div class="text-1" style="height: 20px">bgcolor1：页面模块背景、标签背景、弹窗头像框 </div>
+                                <span id="colorValue1"  class="text-2"> #778bee</span>
+                            </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left;align-items: center; ">
+                            <div id="color-box2" class="color-box color-2 "></div>
+                            <div style="margin-left: 10px;">
+                                <div class="text-1" style="height: 20px">bgcolor2：页面模块背景2 </div>
+                                <span id="colorText2" class="text-2">#293da3</span>
+                            </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                            <div id="color-box3" class="color-box color-3 "></div>
+                            <div style="margin-left: 10px;">
+                                <div class="text-1" style="height: 20px">bgcolor3：页面背景色、表格边框色 </div>
+                                <span id="colorValue3"  class="text-2">#4b62d2 </span>
+                            </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left;align-items: center; ">
+                            <div id="color-box4" class="color-box color-4 "></div>
+                            <div style="margin-left: 10px;">
+                                <div class="text-1" style="height: 20px">bgcolor4：标题背景、滚动条色值、tab底色 </div>
+                                <span id="colorValue4"  class="text-2"> #182c8b</span>
+                            </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left;align-items: center; ">
+                            <div class="color-box" style="background: #f5a623;"></div>
+                            <div style="margin-left: 10px;">
+                                <div class="text-1" style="opacity: 0.5; height: 20px">bgColor5：吸底背景、tab选中状态、页面头像框 </div><!--描述有调整-->
+                                <span class="text-3">#f5a623 </span>
+                            </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                            <div class="color-box" style="background:rgba(7,8,44,0.9);"></div>
+                            <div style="margin-left: 10px;">
+                                <div class="text-1" style="opacity: 0.5; height: 20px">tipBgColor：tip背景色（带透明度） </div>
+                                <span class="text-3">rgba(7,8,44,0.9) </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 0px; left:10px; display: flex; justify-content:left; position: relative">
-                <div class="color-box" style="background: #ffff7d;"></div>
-                <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1" style="opacity: 0.5;">fontColor2：强调文字颜色（昵称、标题、称号） </div>
-                <div> <span class="text-3">#ffff7d </span> </div>
-                </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 0px; left:10px; display: flex; justify-content:left; position: relative">
-                <div class="color-box" style="background: #ffff7d;"></div>
-                <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1" style="opacity: 0.5;">fontColor3：辅助文字颜色 </div>
-                <div> <span class="text-3">#ffff7d </span> </div>
-                </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 0px; left:10px; display: flex; justify-content:left; position: relative">
-                <div class="color-box" style="background: #07082c;"></div>
-                <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1" style="opacity: 0.5;">fontColor4：辅助文字颜色 </div>
-                <div> <span class="text-3">#07082c </span> </div>
-                </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 0px; left:10px; display: flex; justify-content:left; position: relative">
-                <div id="color-box1" class="color-box color-1 "></div>
-                <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1">bgcolor1：页面模块背景、标签背景、弹窗头像框 </div>
-                <div> <span id="colorValue1"  class="text-2"> #778bee</span> </div>
-                </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 0px; left:10px; display: flex; justify-content:left; position: relative">
-                <div id="color-box2" class="color-box color-2 "></div>
-                <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1">bgcolor2：页面模块背景2 </div>
-                <div> <span id="colorText2" class="text-2">#293da3</span> </div>
-                </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 0px; left:10px; display: flex; justify-content:left; position: relative">
-                <div id="color-box3" class="color-box color-3 "></div>
-                <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1">bgcolor3：页面背景色、表格边框色 </div>
-                <div> <span id="colorValue3"  class="text-2">#4b62d2 </span> </div>
-                </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 0px; left:10px; display: flex; justify-content:left; position: relative">
-                <div id="color-box4" class="color-box color-4 "></div>
-                <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1">bgcolor4：标题背景、滚动条色值、tab底色 </div>
-                <div> <span id="colorValue4"  class="text-2"> #182c8b</span> </div>
-                </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 0px; left:10px; display: flex; justify-content:left; position: relative">
-                <div class="color-box" style="background: #f5a623;"></div>
-                <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1" style="opacity: 0.5;">bgColor5：吸底背景、tab选中状态、页面头像框 </div><!--描述有调整-->
-                <div> <span class="text-3">#f5a623 </span> </div>
-                </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 0px; left:10px; display: flex; justify-content:left; position: relative">
-                <div class="color-box" style="background:rgba(7,8,44,0.9);"></div>
-                <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1" style="opacity: 0.5;">tipBgColor：tip背景色（带透明度） </div>
-                <div> <span class="text-3">rgba(7,8,44,0.9) </span> </div>
-                </div>
-            </div>
-            </div>
-            <div style="width: 780px; height: 667px; position: relative; top: 10px;transform:scale(0.85); transform-origin: top;display: flex; justify-content: space-between; position: relative">
-            <!--页面1-->
-                <div style="width: 375px; height: 667px; position: relative;">
+                <div style="width: 750px; height: 667px; position: relative; top: 10px;transform:scale(0.8); transform-origin: top center; display: flex; justify-content: space-between; position: relative">
+                    <!--页面1-->
+                    <div style="width: 375px; height: 667px; position: relative;">
 
-                <!--头图-->
-                <div style="width: 375px; height: 667px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor3)">
-                    <!--头图背景-->
-                    <div  id="bg-img" style="width: 375px; height: 95px; left: 0px; top: 0px; position: absolute ">
+                    <!--头图-->
+                    <div style="width: 375px; height: 667px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor3)">
+                        <!--头图背景-->
+                        <div  id="bg-img" style="width: 375px; height: 95px; left: 0px; top: 0px; position: absolute ">
+                        
+                        </div>
+                        <!--头图标题-->
+                        <div id="title-img"  style="width: 375px; height: 95px; left: 0px; top: 0px; position: absolute">
+                        
+                        </div>
+                        <div style="width: 375px; height: 28px; left: 0px; top: 67px; position: absolute">
+                        <svg width="375" height="28" viewBox="0 0 375 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0.5 0.5C19.6667 9.83333 81.4 28.5 188 28.5C294.6 28.5 358.5 9.83333 375.5 0.5V28.5H188H0.5V0.5Z" fill="var(--bgcolor3)"/>
+                        </svg>
+                        </div>
+                    </div>
+
                     
+                    <div style="width: 375px; height: 49px; left: -0.50px; top: 618px; position: absolute; background: #FDA11D">
+                        <div style="width: 122.50px; height: 49px; left: 0px; top: 0px; position: absolute">
+                        <div style="left: 18.50px; top: 13.75px; position: absolute; color: white; font-size: 15px;  font-weight: 500; word-wrap: break-word">主播今日任务</div>
+                        </div>
+                        <div style="width: 214px; height: 49px; left: 129.50px; top: 0px; position: absolute">
+                        <div style="width: 180px; height: 16px; left: 34px; top: 16.25px; position: absolute; background: var(--bgcolor4); border-radius: 8px; overflow: hidden">
+                            <div style="width: 109px; height: 16px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor1); border-radius: 8px"></div>
+                        </div>
+                        <div style="left: 88.50px; top: 17.75px; position: absolute; color: white; font-size: 14px;  font-weight: 500; line-height: 14px; word-wrap: break-word">800/13140</div>
+                        <div style="left: 0px; top: 16.75px; position: absolute; color: #FFFF7D; font-size: 15px;  font-weight: 500; line-height: 15px; word-wrap: break-word">Lv1</div>
+                        </div>
+                        <div style="width: 16px; height: 16px; left: 350.50px; top: 16.50px; position: absolute">
+                        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="0.5" y="1" width="15" height="15" rx="7.5" stroke="white"/>
+                            <path d="M7.99343 3.79395C8.26643 3.79395 8.50043 3.87195 8.68243 4.05395C8.86443 4.22295 8.95543 4.44395 8.95543 4.71695C8.95543 4.98995 8.85143 5.21095 8.66943 5.39295C8.48743 5.56195 8.25343 5.65295 7.99343 5.65295C7.72043 5.65295 7.49943 5.56195 7.31743 5.39295C7.13543 5.21095 7.04443 4.97695 7.04443 4.71695C7.04443 4.44395 7.13543 4.22295 7.31743 4.05395C7.49943 3.87195 7.72043 3.79395 7.99343 3.79395ZM7.30443 6.48495H8.68243V13.2059H7.30443V6.48495Z" fill="white"/>
+                        </svg>          
+                        </div>
                     </div>
-                    <!--头图标题-->
-                    <div id="title-img"  style="width: 375px; height: 95px; left: 0px; top: 0px; position: absolute">
-                    
-                    </div>
-                    <div style="width: 375px; height: 28px; left: 0px; top: 67px; position: absolute">
-                    <svg width="375" height="28" viewBox="0 0 375 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0.5 0.5C19.6667 9.83333 81.4 28.5 188 28.5C294.6 28.5 358.5 9.83333 375.5 0.5V28.5H188H0.5V0.5Z" fill="var(--bgcolor3)"/>
-                    </svg>
-                    </div>
-                </div>
 
-                
-                <div style="width: 375px; height: 49px; left: -0.50px; top: 618px; position: absolute; background: #FDA11D">
-                    <div style="width: 122.50px; height: 49px; left: 0px; top: 0px; position: absolute">
-                    <div style="left: 18.50px; top: 13.75px; position: absolute; color: white; font-size: 15px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">主播今日任务</div>
+                    <div style="width: 375px; height: 64px; left: -0.50px; top: 552px; position: absolute">
+                        <div style="padding-left: 17.50px; padding-right: 17.50px; padding-top: 6px; padding-bottom: 6px; left: 10px; top: 8.50px; position: absolute; background: var(--bgcolor1); border-radius: 10px; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 5px; display: inline-flex">
+                        <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 500; line-height: 16px; word-wrap: break-word">33</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                            <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px;  font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                            </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 500; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 500; word-wrap: break-word">123,456,789</div>
+                            </div>
+                        </div>
+                        </div>
                     </div>
-                    <div style="width: 214px; height: 49px; left: 129.50px; top: 0px; position: absolute">
-                    <div style="width: 180px; height: 16px; left: 34px; top: 16.25px; position: absolute; background: var(--bgcolor4); border-radius: 8px; overflow: hidden">
-                        <div style="width: 109px; height: 16px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor1); border-radius: 8px"></div>
-                    </div>
-                    <div style="left: 88.50px; top: 17.75px; position: absolute; color: white; font-size: 14px; font-family: PingFang SC; font-weight: 500; line-height: 14px; word-wrap: break-word">800/13140</div>
-                    <div style="left: 0px; top: 16.75px; position: absolute; color: #FFFF7D; font-size: 15px; font-family: PingFang SC; font-weight: 500; line-height: 15px; word-wrap: break-word">Lv1</div>
-                    </div>
-                    <div style="width: 16px; height: 16px; left: 350.50px; top: 16.50px; position: absolute">
-                    <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="0.5" y="1" width="15" height="15" rx="7.5" stroke="white"/>
-                        <path d="M7.99343 3.79395C8.26643 3.79395 8.50043 3.87195 8.68243 4.05395C8.86443 4.22295 8.95543 4.44395 8.95543 4.71695C8.95543 4.98995 8.85143 5.21095 8.66943 5.39295C8.48743 5.56195 8.25343 5.65295 7.99343 5.65295C7.72043 5.65295 7.49943 5.56195 7.31743 5.39295C7.13543 5.21095 7.04443 4.97695 7.04443 4.71695C7.04443 4.44395 7.13543 4.22295 7.31743 4.05395C7.49943 3.87195 7.72043 3.79395 7.99343 3.79395ZM7.30443 6.48495H8.68243V13.2059H7.30443V6.48495Z" fill="white"/>
-                    </svg>          
-                    </div>
-                </div>
 
-                <div style="width: 375px; height: 64px; left: -0.50px; top: 552px; position: absolute">
-                    <div style="padding-left: 17.50px; padding-right: 17.50px; padding-top: 6px; padding-bottom: 6px; left: 10px; top: 8.50px; position: absolute; background: var(--bgcolor1); border-radius: 10px; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 5px; display: inline-flex">
-                    <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                        <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; line-height: 16px; word-wrap: break-word">33</div>
+                    <div style="padding-top: 11px; padding-left: 10px; left: -0.50px; top: 135px; position: absolute; justify-content: flex-start; align-items: center; gap: 2px; display: inline-flex">
+                        
+                        <!--表内-->
+                        <div style="width: 355px; height: 406px; position: relative; background: var(--bgcolor2); border-radius: 10px">
+                        <!--行1-->
+                        <div style="left: 20.50px; top: 40px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 15.50px; display: inline-flex">
+                            <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                                <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 600; line-height: 16px; word-wrap: break-word">1</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                                <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px; font-family: PingFang HK; font-weight: 300; line-height: 7px; word-wrap: break-word">直播</div>
+                                </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                                <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                                <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 600; word-wrap: break-word">123,456,789</div>
+                            </div>
+                            </div>
+                            <!--行2-->
+                            <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                                <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 600; line-height: 16px; word-wrap: break-word">2</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                                <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px;  font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                                </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                                <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                                <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 600; word-wrap: break-word">123,456,789</div>
+                            </div>
+                            </div>
+                            <!--行3-->
+                            <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                                <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 600; line-height: 16px; word-wrap: break-word">3</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                                <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px;  font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                                </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                                <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                                <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 600; word-wrap: break-word">123,456,789</div>
+                            </div>
+                            </div>
+                            <!--行4-->
+                            <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                                <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 600; line-height: 16px; word-wrap: break-word">4</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                                <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px;  font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                                </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                                <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                                <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 600; word-wrap: break-word">123,456,789</div>
+                            </div>
+                            </div>
+                            <!--行5-->
+                            <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                                <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 600; line-height: 16px; word-wrap: break-word">5</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                                <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px;  font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                                </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                                <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                                <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 600; word-wrap: break-word">123,456,789</div>
+                            </div>
+                            </div>
+                            <!--行6-->
+                            <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                                <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 600; line-height: 16px; word-wrap: break-word">6</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                                <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px;  font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                                </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                                <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                                <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 600; word-wrap: break-word">123,456,789</div>
+                            </div>
+                            </div>
+                            
+                            <div style="width: 321px; height: 50px; padding: 0px; flex-direction: column; justify-content: center; align-items: center; gap: 0px; display: inline-flex">
+                            <div style="padding-left: 24px; padding-right: 24px; padding-top: 6px; padding-bottom: 6px; background: var(--bgcolor3); border-radius: 17.50px; overflow: hidden; justify-content: center; align-items: center;">
+                                <div style="color: white; font-size: 16px;  font-weight: 500; word-wrap: break-word">查看更多</div>
+                            </div>
+                            </div>
                         </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
-                        <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang SC; font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
-                        </div>
-                        </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                        <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">用户昵称用户...</div>
-                        </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                        <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">123,456,789</div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
 
-                <div style="padding-top: 11px; padding-left: 10px; left: -0.50px; top: 135px; position: absolute; justify-content: flex-start; align-items: center; gap: 2px; display: inline-flex">
-                    
-                    <!--表内-->
-                    <div style="width: 355px; height: 406px; position: relative; background: var(--bgcolor2); border-radius: 10px">
-                    <!--行1-->
-                    <div style="left: 20.50px; top: 40px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 15.50px; display: inline-flex">
-                        <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; line-height: 16px; word-wrap: break-word">1</div>
-                        </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
-                            <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang HK; font-weight: 300; line-height: 7px; word-wrap: break-word">直播</div>
+                        <!--表头-->
+                        <div style="padding-top: 9px; padding-bottom: 9px; padding-left: 8px; padding-right: 30px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor1); border-radius: 10px; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 5px; display: inline-flex">
+                        <div style="justify-content: flex-start; align-items: flex-start; gap: 100.50px; display: inline-flex">
+                            <div style="color: white; font-size: 16px;  font-weight: 500; line-height: 16px; word-wrap: break-word">名次</div>
+                            <div style="color: white; font-size: 16px;  font-weight: 500; line-height: 16px; word-wrap: break-word">昵称</div>
+                            <div style="justify-content: flex-start; align-items: flex-start; gap: 4px; display: flex">
+                            <div style="color: white; font-size: 16px;  font-weight: 500; line-height: 16px; word-wrap: break-word">票数</div>
+                            <div style="width: 16px; height: 16px; position: relative">
+                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0.5" y="1" width="15" height="15" rx="7.5" stroke="white"/>
+                                <path d="M7.99343 3.79395C8.26643 3.79395 8.50043 3.87195 8.68243 4.05395C8.86443 4.22295 8.95543 4.44395 8.95543 4.71695C8.95543 4.98995 8.85143 5.21095 8.66943 5.39295C8.48743 5.56195 8.25343 5.65295 7.99343 5.65295C7.72043 5.65295 7.49943 5.56195 7.31743 5.39295C7.13543 5.21095 7.04443 4.97695 7.04443 4.71695C7.04443 4.44395 7.13543 4.22295 7.31743 4.05395C7.49943 3.87195 7.72043 3.79395 7.99343 3.79395ZM7.30443 6.48495H8.68243V13.2059H7.30443V6.48495Z" fill="white"/>
+                                </svg> 
+                            </div>
                             </div>
                         </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
                         </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">123,456,789</div>
-                        </div>
-                        </div>
-                        <!--行2-->
-                        <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; line-height: 16px; word-wrap: break-word">2</div>
-                        </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
-                            <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang SC; font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
-                            </div>
-                        </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
-                        </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">123,456,789</div>
-                        </div>
-                        </div>
-                        <!--行3-->
-                        <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; line-height: 16px; word-wrap: break-word">3</div>
-                        </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
-                            <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang SC; font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
-                            </div>
-                        </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
-                        </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">123,456,789</div>
-                        </div>
-                        </div>
-                        <!--行4-->
-                        <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; line-height: 16px; word-wrap: break-word">4</div>
-                        </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
-                            <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang SC; font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
-                            </div>
-                        </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
-                        </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">123,456,789</div>
-                        </div>
-                        </div>
-                        <!--行5-->
-                        <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; line-height: 16px; word-wrap: break-word">5</div>
-                        </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
-                            <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang SC; font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
-                            </div>
-                        </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
-                        </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">123,456,789</div>
-                        </div>
-                        </div>
-                        <!--行6-->
-                        <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; line-height: 16px; word-wrap: break-word">6</div>
-                        </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
-                            <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang SC; font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
-                            </div>
-                        </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
-                        </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">123,456,789</div>
-                        </div>
+
+                        
+
                         </div>
                         
-                        <div style="width: 321px; height: 50px; padding: 0px; flex-direction: column; justify-content: center; align-items: center; gap: 0px; display: inline-flex">
-                        <div style="padding-left: 24px; padding-right: 24px; padding-top: 6px; padding-bottom: 6px; background: var(--bgcolor3); border-radius: 17.50px; overflow: hidden; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-                            <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">查看更多</div>
+                        <!--滚动条-->
+                        <div style="width: 8px; height: 250px; background: var(--bgcolor4); border-radius: 4px"></div>
+                    </div>
+
+                    <div style="left: -0.50px; top: -0.50px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 61px; display: inline-flex">
+                        <div style="width: 375px; padding-top: 9px; justify-content: center; align-items: flex-start; gap: 216px; display: inline-flex">
+                        <div style="padding-left: 11.50px; padding-right: 11.50px; padding-top: 1px; padding-bottom: 1px; background: var(--bgcolor3); border-radius: 10px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
+                            <div style="color: white; font-size: 12px;  font-weight: 500; word-wrap: break-word">5.30~6.1</div>
                         </div>
+                        <div style="justify-content: flex-start; align-items: flex-start; gap: 5px; display: flex">
+                            <div style="width: 30px; height: 30px; position: relative">
+                            <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0.5" y="0.5" width="30" height="30" rx="15" fill="black" fill-opacity="0.8"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M9.125 15.75C9.125 12.1059 12.159 9.125 15.9351 9.125C18.5738 9.125 20.8543 10.5832 21.9854 12.7059L20.8591 12.0916C20.4955 11.8932 20.0399 12.0272 19.8416 12.3909C19.6432 12.7545 19.7772 13.2101 20.1409 13.4084L22.8909 14.9084C23.0827 15.0131 23.3107 15.0288 23.5151 14.9516C23.7196 14.8743 23.8802 14.7117 23.9548 14.5063L24.9548 11.7563C25.0964 11.367 24.8956 10.9367 24.5063 10.7952C24.117 10.6536 23.6867 10.8544 23.5452 11.2437L23.1701 12.2752C21.854 9.6636 19.1041 7.875 15.9351 7.875C11.4986 7.875 7.875 11.386 7.875 15.75C7.875 20.114 11.4986 23.625 15.9351 23.625C18.8067 23.625 21.3327 22.1566 22.7608 19.9401C22.9478 19.6499 22.8641 19.2631 22.5739 19.0762C22.2838 18.8892 21.897 18.9729 21.71 19.2631C20.5075 21.1295 18.3735 22.375 15.9351 22.375C12.159 22.375 9.125 19.3941 9.125 15.75Z" fill="white"/>
+                            </svg>
+                            </div>
+                            <div style="width: 30px; height: 30px; position: relative">
+                            <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0.5" y="0.5" width="30" height="30" rx="15" fill="black" fill-opacity="0.8"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M20.9325 8.94185C21.1766 8.69777 21.5723 8.69777 21.8164 8.94185C22.0605 9.18593 22.0605 9.58165 21.8164 9.82573L16.513 15.1291L21.8163 20.4324C22.0604 20.6764 22.0604 21.0722 21.8163 21.3162C21.5722 21.5603 21.1765 21.5603 20.9324 21.3162L15.6292 16.013L10.3259 21.3162C10.0818 21.5603 9.6861 21.5603 9.44202 21.3162C9.19795 21.0721 9.19795 20.6764 9.44202 20.4323L20.9325 8.94185ZM14.8261 14.3261C15.0701 14.082 15.0701 13.6863 14.8261 13.4422L10.3257 8.94185C10.0817 8.69777 9.68592 8.69777 9.44185 8.94185C9.19777 9.18593 9.19777 9.58165 9.44185 9.82573L13.9422 14.3261C14.1863 14.5701 14.582 14.5701 14.8261 14.3261Z" fill="white"/>
+                            </svg>
+                            </div>
+                        </div>
+                        </div>
+                        <div style="width: 375px; justify-content: center; align-items: center; gap: 13px; display: inline-flex">
+                        <div style="padding-left: 31px; padding-right: 31px; padding-top: 6.50px; padding-bottom: 6.50px; background: #FDA11D; border-radius: 18px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
+                            <div style="color: white; font-size: 16px;  font-weight: 500; word-wrap: break-word">主播榜</div>
+                        </div>
+                        <div style="padding-left: 31px; padding-right: 31px; padding-top: 6.50px; padding-bottom: 6.50px; background: var(--bgcolor4); border-radius: 18px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
+                            <div style="color: white; font-size: 16px;  font-weight: 500; word-wrap: break-word">粉丝榜</div>
+                        </div>
+                        <div style="padding-left: 31px; padding-right: 31px; padding-top: 6.50px; padding-bottom: 6.50px; background: var(--bgcolor4); border-radius: 18px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
+                            <div style="color: white; font-size: 16px;  font-weight: 500; word-wrap: break-word">荣誉榜</div>
+                        </div>
+                        </div>
+
+                    </div>
+                    </div>
+                    <div style="width: 20px; height: 667px;position: relative;"></div>
+                    <!--页面2-->
+                    <div style="width: 375px; height: 667px; position: relative;">
+
+                    <!--头图-->
+                    <div style="width: 375px; height: 667px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor3)">
+                        <!--头图背景-->
+                        <div  id="bg-img2" style="width: 375px; height: 95px; left: 0px; top: 0px; position: absolute ">
+                        
+                        </div>
+                        <!--头图标题-->
+                        <div id="title-img2"  style="width: 375px; height: 95px; left: 0px; top: 0px; position: absolute">
+                        
+                        </div>
+                        <div style="width: 375px; height: 28px; left: 0px; top: 67px; position: absolute">
+                        <svg width="375" height="28" viewBox="0 0 375 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0.5 0.5C19.6667 9.83333 81.4 28.5 188 28.5C294.6 28.5 358.5 9.83333 375.5 0.5V28.5H188H0.5V0.5Z" fill="var(--bgcolor3)"/>
+                        </svg>
                         </div>
                     </div>
 
-                    <!--表头-->
-                    <div style="padding-top: 9px; padding-bottom: 9px; padding-left: 8px; padding-right: 30px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor1); border-radius: 10px; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 5px; display: inline-flex">
-                    <div style="justify-content: flex-start; align-items: flex-start; gap: 100.50px; display: inline-flex">
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; line-height: 16px; word-wrap: break-word">名次</div>
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; line-height: 16px; word-wrap: break-word">昵称</div>
-                        <div style="justify-content: flex-start; align-items: flex-start; gap: 4px; display: flex">
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; line-height: 16px; word-wrap: break-word">票数</div>
-                        <div style="width: 16px; height: 16px; position: relative">
-                            <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    
+                    <div style="width: 375px; height: 49px; left: -0.50px; top: 618px; position: absolute; background: #FDA11D">
+                        <div style="width: 122.50px; height: 49px; left: 0px; top: 0px; position: absolute">
+                        <div style="left: 18.50px; top: 13.75px; position: absolute; color: white; font-size: 15px;  font-weight: 500; word-wrap: break-word">主播今日任务</div>
+                        </div>
+                        <div style="width: 214px; height: 49px; left: 129.50px; top: 0px; position: absolute">
+                        <div style="width: 180px; height: 16px; left: 34px; top: 16.25px; position: absolute; background: var(--bgcolor4); border-radius: 8px; overflow: hidden">
+                            <div style="width: 109px; height: 16px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor1); border-radius: 8px"></div>
+                        </div>
+                        <div style="left: 88.50px; top: 17.75px; position: absolute; color: white; font-size: 14px;  font-weight: 500; line-height: 14px; word-wrap: break-word">800/13140</div>
+                        <div style="left: 0px; top: 16.75px; position: absolute; color: #FFFF7D; font-size: 15px;  font-weight: 500; line-height: 15px; word-wrap: break-word">Lv1</div>
+                        </div>
+                        <div style="width: 16px; height: 16px; left: 350.50px; top: 16.50px; position: absolute">
+                        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="0.5" y="1" width="15" height="15" rx="7.5" stroke="white"/>
                             <path d="M7.99343 3.79395C8.26643 3.79395 8.50043 3.87195 8.68243 4.05395C8.86443 4.22295 8.95543 4.44395 8.95543 4.71695C8.95543 4.98995 8.85143 5.21095 8.66943 5.39295C8.48743 5.56195 8.25343 5.65295 7.99343 5.65295C7.72043 5.65295 7.49943 5.56195 7.31743 5.39295C7.13543 5.21095 7.04443 4.97695 7.04443 4.71695C7.04443 4.44395 7.13543 4.22295 7.31743 4.05395C7.49943 3.87195 7.72043 3.79395 7.99343 3.79395ZM7.30443 6.48495H8.68243V13.2059H7.30443V6.48495Z" fill="white"/>
-                            </svg> 
+                        </svg>          
                         </div>
-                        </div>
-                    </div>
                     </div>
 
-                    
-
-                    </div>
-                    
-                    <!--滚动条-->
-                    <div style="width: 8px; height: 250px; background: var(--bgcolor4); border-radius: 4px"></div>
-                </div>
-
-                <div style="left: -0.50px; top: -0.50px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 61px; display: inline-flex">
-                    <div style="width: 375px; padding-top: 9px; justify-content: center; align-items: flex-start; gap: 216px; display: inline-flex">
-                    <div style="padding-left: 11.50px; padding-right: 11.50px; padding-top: 1px; padding-bottom: 1px; background: var(--bgcolor3); border-radius: 10px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
-                        <div style="color: white; font-size: 12px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">5.30~6.1</div>
-                    </div>
-                    <div style="justify-content: flex-start; align-items: flex-start; gap: 5px; display: flex">
-                        <div style="width: 30px; height: 30px; position: relative">
-                        <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="0.5" y="0.5" width="30" height="30" rx="15" fill="black" fill-opacity="0.8"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.125 15.75C9.125 12.1059 12.159 9.125 15.9351 9.125C18.5738 9.125 20.8543 10.5832 21.9854 12.7059L20.8591 12.0916C20.4955 11.8932 20.0399 12.0272 19.8416 12.3909C19.6432 12.7545 19.7772 13.2101 20.1409 13.4084L22.8909 14.9084C23.0827 15.0131 23.3107 15.0288 23.5151 14.9516C23.7196 14.8743 23.8802 14.7117 23.9548 14.5063L24.9548 11.7563C25.0964 11.367 24.8956 10.9367 24.5063 10.7952C24.117 10.6536 23.6867 10.8544 23.5452 11.2437L23.1701 12.2752C21.854 9.6636 19.1041 7.875 15.9351 7.875C11.4986 7.875 7.875 11.386 7.875 15.75C7.875 20.114 11.4986 23.625 15.9351 23.625C18.8067 23.625 21.3327 22.1566 22.7608 19.9401C22.9478 19.6499 22.8641 19.2631 22.5739 19.0762C22.2838 18.8892 21.897 18.9729 21.71 19.2631C20.5075 21.1295 18.3735 22.375 15.9351 22.375C12.159 22.375 9.125 19.3941 9.125 15.75Z" fill="white"/>
-                        </svg>
-                        </div>
-                        <div style="width: 30px; height: 30px; position: relative">
-                        <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="0.5" y="0.5" width="30" height="30" rx="15" fill="black" fill-opacity="0.8"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M20.9325 8.94185C21.1766 8.69777 21.5723 8.69777 21.8164 8.94185C22.0605 9.18593 22.0605 9.58165 21.8164 9.82573L16.513 15.1291L21.8163 20.4324C22.0604 20.6764 22.0604 21.0722 21.8163 21.3162C21.5722 21.5603 21.1765 21.5603 20.9324 21.3162L15.6292 16.013L10.3259 21.3162C10.0818 21.5603 9.6861 21.5603 9.44202 21.3162C9.19795 21.0721 9.19795 20.6764 9.44202 20.4323L20.9325 8.94185ZM14.8261 14.3261C15.0701 14.082 15.0701 13.6863 14.8261 13.4422L10.3257 8.94185C10.0817 8.69777 9.68592 8.69777 9.44185 8.94185C9.19777 9.18593 9.19777 9.58165 9.44185 9.82573L13.9422 14.3261C14.1863 14.5701 14.582 14.5701 14.8261 14.3261Z" fill="white"/>
-                        </svg>
-                        </div>
-                    </div>
-                    </div>
-                    <div style="width: 375px; justify-content: center; align-items: center; gap: 13px; display: inline-flex">
-                    <div style="padding-left: 31px; padding-right: 31px; padding-top: 6.50px; padding-bottom: 6.50px; background: #FDA11D; border-radius: 18px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">主播榜</div>
-                    </div>
-                    <div style="padding-left: 31px; padding-right: 31px; padding-top: 6.50px; padding-bottom: 6.50px; background: var(--bgcolor4); border-radius: 18px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">粉丝榜</div>
-                    </div>
-                    <div style="padding-left: 31px; padding-right: 31px; padding-top: 6.50px; padding-bottom: 6.50px; background: var(--bgcolor4); border-radius: 18px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">荣誉榜</div>
-                    </div>
-                    </div>
-
-                </div>
-                </div>
-                <div style="width: 20px; height: 667px;position: relative;"></div>
-                <!--页面2-->
-                <div style="width: 375px; height: 667px; position: relative;">
-
-                <!--头图-->
-                <div style="width: 375px; height: 667px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor3)">
-                    <!--头图背景-->
-                    <div  id="bg-img2" style="width: 375px; height: 95px; left: 0px; top: 0px; position: absolute ">
-                    
-                    </div>
-                    <!--头图标题-->
-                    <div id="title-img2"  style="width: 375px; height: 95px; left: 0px; top: 0px; position: absolute">
-                    
-                    </div>
-                    <div style="width: 375px; height: 28px; left: 0px; top: 67px; position: absolute">
-                    <svg width="375" height="28" viewBox="0 0 375 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0.5 0.5C19.6667 9.83333 81.4 28.5 188 28.5C294.6 28.5 358.5 9.83333 375.5 0.5V28.5H188H0.5V0.5Z" fill="var(--bgcolor3)"/>
-                    </svg>
-                    </div>
-                </div>
-
-                
-                <div style="width: 375px; height: 49px; left: -0.50px; top: 618px; position: absolute; background: #FDA11D">
-                    <div style="width: 122.50px; height: 49px; left: 0px; top: 0px; position: absolute">
-                    <div style="left: 18.50px; top: 13.75px; position: absolute; color: white; font-size: 15px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">主播今日任务</div>
-                    </div>
-                    <div style="width: 214px; height: 49px; left: 129.50px; top: 0px; position: absolute">
-                    <div style="width: 180px; height: 16px; left: 34px; top: 16.25px; position: absolute; background: var(--bgcolor4); border-radius: 8px; overflow: hidden">
-                        <div style="width: 109px; height: 16px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor1); border-radius: 8px"></div>
-                    </div>
-                    <div style="left: 88.50px; top: 17.75px; position: absolute; color: white; font-size: 14px; font-family: PingFang SC; font-weight: 500; line-height: 14px; word-wrap: break-word">800/13140</div>
-                    <div style="left: 0px; top: 16.75px; position: absolute; color: #FFFF7D; font-size: 15px; font-family: PingFang SC; font-weight: 500; line-height: 15px; word-wrap: break-word">Lv1</div>
-                    </div>
-                    <div style="width: 16px; height: 16px; left: 350.50px; top: 16.50px; position: absolute">
-                    <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="0.5" y="1" width="15" height="15" rx="7.5" stroke="white"/>
-                        <path d="M7.99343 3.79395C8.26643 3.79395 8.50043 3.87195 8.68243 4.05395C8.86443 4.22295 8.95543 4.44395 8.95543 4.71695C8.95543 4.98995 8.85143 5.21095 8.66943 5.39295C8.48743 5.56195 8.25343 5.65295 7.99343 5.65295C7.72043 5.65295 7.49943 5.56195 7.31743 5.39295C7.13543 5.21095 7.04443 4.97695 7.04443 4.71695C7.04443 4.44395 7.13543 4.22295 7.31743 4.05395C7.49943 3.87195 7.72043 3.79395 7.99343 3.79395ZM7.30443 6.48495H8.68243V13.2059H7.30443V6.48495Z" fill="white"/>
-                    </svg>          
-                    </div>
-                </div>
-
-                <div style="width: 375px; height: 64px; left: -0.50px; top: 552px; position: absolute">
-                    <div style="padding-left: 17.50px; padding-right: 17.50px; padding-top: 6px; padding-bottom: 6px; left: 10px; top: 8.50px; position: absolute; background: var(--bgcolor1); border-radius: 10px; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 5px; display: inline-flex">
-                    <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                        <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; line-height: 16px; word-wrap: break-word">33</div>
-                        </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
-                        <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang SC; font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
-                        </div>
-                        </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                        <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">用户昵称用户...</div>
-                        </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                        <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">123,456,789</div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-
-                <div style="padding-top: 11px; padding-left: 10px; left: -0.50px; top: 135px; position: absolute; justify-content: flex-start; align-items: center; gap: 2px; display: inline-flex">
-                    
-                    <!--表内-->
-                    <div style="width: 355px; height: 406px; position: relative; background: var(--bgcolor2); border-radius: 10px" >
-                    <!--行1-->
-                    <div style="left: 20.50px; top: 140px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 15.50px; display: inline-flex">
+                    <div style="width: 375px; height: 64px; left: -0.50px; top: 552px; position: absolute">
+                        <div style="padding-left: 17.50px; padding-right: 17.50px; padding-top: 6px; padding-bottom: 6px; left: 10px; top: 8.50px; position: absolute; background: var(--bgcolor1); border-radius: 10px; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 5px; display: inline-flex">
                         <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; line-height: 16px; word-wrap: break-word">1</div>
-                        </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 500; line-height: 16px; word-wrap: break-word">33</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
                             <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang HK; font-weight: 300; line-height: 7px; word-wrap: break-word">直播</div>
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px;  font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                            </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 500; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 500; word-wrap: break-word">123,456,789</div>
                             </div>
                         </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
                         </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">123,456,789</div>
-                        </div>
-                        </div>
-                        <!--行2-->
-                        <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; line-height: 16px; word-wrap: break-word">2</div>
-                        </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
-                            <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang SC; font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                    </div>
+
+                    <div style="padding-top: 11px; padding-left: 10px; left: -0.50px; top: 135px; position: absolute; justify-content: flex-start; align-items: center; gap: 2px; display: inline-flex">
+                        
+                        <!--表内-->
+                        <div style="width: 355px; height: 406px; position: relative; background: var(--bgcolor2); border-radius: 10px" >
+                        <!--行1-->
+                        <div style="left: 20.50px; top: 140px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 15.50px; display: inline-flex">
+                            <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                                <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 600; line-height: 16px; word-wrap: break-word">1</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                                <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px; font-family: PingFang HK; font-weight: 300; line-height: 7px; word-wrap: break-word">直播</div>
+                                </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                                <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                                <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 600; word-wrap: break-word">123,456,789</div>
+                            </div>
+                            </div>
+                            <!--行2-->
+                            <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                                <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 600; line-height: 16px; word-wrap: break-word">2</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                                <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px;  font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                                </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                                <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                                <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 600; word-wrap: break-word">123,456,789</div>
+                            </div>
+                            </div>
+                            <!--行3-->
+                            <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                                <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 600; line-height: 16px; word-wrap: break-word">3</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                                <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px;  font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                                </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                                <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                                <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 600; word-wrap: break-word">123,456,789</div>
+                            </div>
+                            </div>
+                            <!--行4-->
+                            <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                                <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 600; line-height: 16px; word-wrap: break-word">4</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                                <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px;  font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                                </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                                <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                                <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 600; word-wrap: break-word">123,456,789</div>
+                            </div>
+                            </div>
+                            <!--行5-->
+                            <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                            <div style="width: 37.50px; height: 35px; position: relative">
+                                <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px;  font-weight: 600; line-height: 16px; word-wrap: break-word">5</div>
+                            </div>
+                            <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
+                                <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
+                                <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
+                                <div style="color: white; font-size: 7px;  font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                                </div>
+                            </div>
+                            <div style="width: 123.50px; height: 35px; position: relative">
+                                <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px;  font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
+                            </div>
+                            <div style="width: 124px; height: 35px; position: relative">
+                                <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px;  font-weight: 600; word-wrap: break-word">123,456,789</div>
+                            </div>
                             </div>
                         </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
-                        </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">123,456,789</div>
-                        </div>
-                        </div>
-                        <!--行3-->
-                        <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; line-height: 16px; word-wrap: break-word">3</div>
-                        </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
-                            <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang SC; font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+
+                        <!--表头-->
+                        <div style="padding-top: 9px; padding-bottom: 9px; padding-left: 8px; padding-right: 30px; left: 0px; top: 93.50px; position: absolute; background: var(--bgcolor1); border-radius: 10px; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 5px; display: inline-flex">
+                        <div style="justify-content: flex-start; align-items: flex-start; gap: 100.50px; display: inline-flex">
+                            <div style="color: white; font-size: 16px;  font-weight: 500; line-height: 16px; word-wrap: break-word">名次</div>
+                            <div style="color: white; font-size: 16px;  font-weight: 500; line-height: 16px; word-wrap: break-word">昵称</div>
+                            <div style="justify-content: flex-start; align-items: flex-start; gap: 4px; display: flex">
+                            <div style="color: white; font-size: 16px;  font-weight: 500; line-height: 16px; word-wrap: break-word">票数</div>
+                            <div style="width: 16px; height: 16px; position: relative">
+                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0.5" y="1" width="15" height="15" rx="7.5" stroke="white"/>
+                                <path d="M7.99343 3.79395C8.26643 3.79395 8.50043 3.87195 8.68243 4.05395C8.86443 4.22295 8.95543 4.44395 8.95543 4.71695C8.95543 4.98995 8.85143 5.21095 8.66943 5.39295C8.48743 5.56195 8.25343 5.65295 7.99343 5.65295C7.72043 5.65295 7.49943 5.56195 7.31743 5.39295C7.13543 5.21095 7.04443 4.97695 7.04443 4.71695C7.04443 4.44395 7.13543 4.22295 7.31743 4.05395C7.49943 3.87195 7.72043 3.79395 7.99343 3.79395ZM7.30443 6.48495H8.68243V13.2059H7.30443V6.48495Z" fill="white"/>
+                                </svg> 
+                            </div>
                             </div>
                         </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
                         </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">123,456,789</div>
+
+                        <!--二级tab-->
+                        <div style="padding-left: 13.50px; padding-right: 13.50px; left: 0px; top: 0px; position: absolute; justify-content: center; align-items: flex-start; display: inline-flex">
+                        <div style="height: 41px; padding-left: 32px; padding-right: 32px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
+                            <div style="padding-top: 11.50px; padding-bottom: 11.50px; justify-content: center; align-items: center; gap: 5px; display: inline-flex">
+                            <div style="color: #FFFF7D; font-size: 16px;  font-weight: 500; line-height: 16px; word-wrap: break-word">主播榜单</div>
+                            </div>
+                            <div style="width: 100px; height: 2px; background: #FFFF7D"></div>
                         </div>
+                        <div style="height: 41px; padding-left: 32px; padding-right: 32px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
+                            <div style="padding-top: 11.50px; padding-bottom: 11.50px; justify-content: center; align-items: center; gap: 5px; display: inline-flex">
+                            <div style="color: white; font-size: 16px;  font-weight: 500; word-wrap: break-word">主播榜单</div>
+                            </div>
+                            <div style="width: 100px; height: 2px; background: rgba(255, 255, 255, 0)"></div>
                         </div>
-                        <!--行4-->
-                        <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; line-height: 16px; word-wrap: break-word">4</div>
+                        </div>      
+
+                        <!--分割线-->
+                        <div style="width: 355px; height: 1px; left: 0px; top: 41px; position: absolute; background: var(--bgcolor1)"></div>
+
+                        <!--活动说明&日期选择器-->
+                        <div style="width: 355px; height: 51px; left: 0px; top: 42.50px; position: absolute">
+                        <div style="padding-top: 7px; padding-bottom: 7px; left: 10px; top: 11px; position: absolute;color: white; justify-content: flex-start; align-items: flex-start; gap: 5px; display: inline-flex">
+                            <div >活动期间榜单每日24:00结算</div>
                         </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
-                            <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang SC; font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                        <div style="width: 105px; height: 85px; left: 240px; top: 11px; position: absolute; background: var(--bgcolor4); border-radius: 14px; overflow: hidden">
+                            <div style="width: 105px; height: 28.50px; left: 0px; top: 56.50px; position: absolute">
+                            <div style="left: 11.50px; top: 4px; position: absolute; color: white; font-size: 14px;  font-weight: 500; word-wrap: break-word">05月05日</div>
+                            </div>
+                            <div style="width: 105px; height: 29px; left: 0px; top: 27.50px; position: absolute; background: var(--bgcolor3)">
+                            <div style="width: 105px; height: 1px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor1)"></div>
+                            <div style="width: 62px; height: 14px; left: 21.50px; top: 7.50px; position: absolute">
+                                <div style="left: -10px; top: 0px; position: absolute; color: white; font-size: 14px;  font-weight: 500; line-height: 14px; word-wrap: break-word">05月06日</div>
+                            </div>
+                            <div style="width: 105px; height: 1px; left: 0px; top: 28px; position: absolute; background: var(--bgcolor1)"></div>
+                            </div>
+                            <div style="width: 105px; height: 27.50px; left: 0px; top: 0px; position: absolute">
+                            <div style="width: 11px; height: 11px; left: 84px; top: 0px; position: absolute">
+                                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10.607 5.3033L5.30371 10.6066L0.000410169 5.3033H10.607Z" fill="white"/>
+                                </svg>                  
+                            </div>
+                            <div style="left: 11.50px; top: 3.50px; position: absolute; color: white; font-size: 14px;  font-weight: 500; word-wrap: break-word">05月07日</div>
                             </div>
                         </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
                         </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">123,456,789</div>
+
                         </div>
+                        
+                        <!--滚动条-->
+                        <div style="width: 8px; height: 250px; background: var(--bgcolor4); border-radius: 4px"></div>
+                    </div>
+
+                    <div style="left: -0.50px; top: -0.50px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 61px; display: inline-flex">
+                        <div style="width: 375px; padding-top: 9px; justify-content: center; align-items: flex-start; gap: 216px; display: inline-flex">
+                        <div style="padding-left: 11.50px; padding-right: 11.50px; padding-top: 1px; padding-bottom: 1px; background: var(--bgcolor3); border-radius: 10px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
+                            <div style="color: white; font-size: 12px;  font-weight: 500; word-wrap: break-word">5.30~6.1</div>
                         </div>
-                        <!--行5-->
-                        <div style="justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="width: 37.50px; height: 35px; position: relative">
-                            <div style="left: 0px; top: 9.50px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; line-height: 16px; word-wrap: break-word">5</div>
-                        </div>
-                        <div style="width: 35px; height: 35px; position: relative; background: linear-gradient(0deg, white 0%, white 100%); border-radius: 17.50px; border: 1px #FDA11D solid;background-size: contain; background-image: url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/main/img/kq.jpg)">
-                            <div style="padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; left: 4.50px; top: 24px; position: absolute; background: rgba(0, 0, 0, 0.60); border-radius: 5.50px; justify-content: center; align-items: center; gap: 2px; display: inline-flex">
-                            <div style="width: 4px; height: 4px; background: #4CCC8C; border-radius: 9999px; border: 0.65px white solid"></div>
-                            <div style="color: white; font-size: 7px; font-family: PingFang SC; font-weight: 400; line-height: 7px; word-wrap: break-word">直播</div>
+                        <div style="justify-content: flex-start; align-items: flex-start; gap: 5px; display: flex">
+                            <div style="width: 30px; height: 30px; position: relative">
+                            <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0.5" y="0.5" width="30" height="30" rx="15" fill="black" fill-opacity="0.8"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M9.125 15.75C9.125 12.1059 12.159 9.125 15.9351 9.125C18.5738 9.125 20.8543 10.5832 21.9854 12.7059L20.8591 12.0916C20.4955 11.8932 20.0399 12.0272 19.8416 12.3909C19.6432 12.7545 19.7772 13.2101 20.1409 13.4084L22.8909 14.9084C23.0827 15.0131 23.3107 15.0288 23.5151 14.9516C23.7196 14.8743 23.8802 14.7117 23.9548 14.5063L24.9548 11.7563C25.0964 11.367 24.8956 10.9367 24.5063 10.7952C24.117 10.6536 23.6867 10.8544 23.5452 11.2437L23.1701 12.2752C21.854 9.6636 19.1041 7.875 15.9351 7.875C11.4986 7.875 7.875 11.386 7.875 15.75C7.875 20.114 11.4986 23.625 15.9351 23.625C18.8067 23.625 21.3327 22.1566 22.7608 19.9401C22.9478 19.6499 22.8641 19.2631 22.5739 19.0762C22.2838 18.8892 21.897 18.9729 21.71 19.2631C20.5075 21.1295 18.3735 22.375 15.9351 22.375C12.159 22.375 9.125 19.3941 9.125 15.75Z" fill="white"/>
+                            </svg>
+                            </div>
+                            <div style="width: 30px; height: 30px; position: relative">
+                            <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0.5" y="0.5" width="30" height="30" rx="15" fill="black" fill-opacity="0.8"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M20.9325 8.94185C21.1766 8.69777 21.5723 8.69777 21.8164 8.94185C22.0605 9.18593 22.0605 9.58165 21.8164 9.82573L16.513 15.1291L21.8163 20.4324C22.0604 20.6764 22.0604 21.0722 21.8163 21.3162C21.5722 21.5603 21.1765 21.5603 20.9324 21.3162L15.6292 16.013L10.3259 21.3162C10.0818 21.5603 9.6861 21.5603 9.44202 21.3162C9.19795 21.0721 9.19795 20.6764 9.44202 20.4323L20.9325 8.94185ZM14.8261 14.3261C15.0701 14.082 15.0701 13.6863 14.8261 13.4422L10.3257 8.94185C10.0817 8.69777 9.68592 8.69777 9.44185 8.94185C9.19777 9.18593 9.19777 9.58165 9.44185 9.82573L13.9422 14.3261C14.1863 14.5701 14.582 14.5701 14.8261 14.3261Z" fill="white"/>
+                            </svg>
                             </div>
                         </div>
-                        <div style="width: 123.50px; height: 35px; position: relative">
-                            <div style="left: 14px; top: 6.50px; position: absolute; color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">用户昵称用户...</div>
                         </div>
-                        <div style="width: 124px; height: 35px; position: relative">
-                            <div style="left: 32.50px; top: 6px; position: absolute; color: white; font-size: 16px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">123,456,789</div>
+                        <div style="width: 375px; justify-content: center; align-items: center; gap: 13px; display: inline-flex">
+                        <div style="padding-left: 31px; padding-right: 31px; padding-top: 6.50px; padding-bottom: 6.50px; background: #FDA11D; border-radius: 18px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
+                            <div style="color: white; font-size: 16px;  font-weight: 500; word-wrap: break-word">主播榜</div>
                         </div>
+                        <div style="padding-left: 31px; padding-right: 31px; padding-top: 6.50px; padding-bottom: 6.50px; background: var(--bgcolor4); border-radius: 18px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
+                            <div style="color: white; font-size: 16px;  font-weight: 500; word-wrap: break-word">粉丝榜</div>
                         </div>
-                    </div>
-
-                    <!--表头-->
-                    <div style="padding-top: 9px; padding-bottom: 9px; padding-left: 8px; padding-right: 30px; left: 0px; top: 93.50px; position: absolute; background: var(--bgcolor1); border-radius: 10px; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 5px; display: inline-flex">
-                    <div style="justify-content: flex-start; align-items: flex-start; gap: 100.50px; display: inline-flex">
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; line-height: 16px; word-wrap: break-word">名次</div>
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; line-height: 16px; word-wrap: break-word">昵称</div>
-                        <div style="justify-content: flex-start; align-items: flex-start; gap: 4px; display: flex">
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; line-height: 16px; word-wrap: break-word">票数</div>
-                        <div style="width: 16px; height: 16px; position: relative">
-                            <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="0.5" y="1" width="15" height="15" rx="7.5" stroke="white"/>
-                            <path d="M7.99343 3.79395C8.26643 3.79395 8.50043 3.87195 8.68243 4.05395C8.86443 4.22295 8.95543 4.44395 8.95543 4.71695C8.95543 4.98995 8.85143 5.21095 8.66943 5.39295C8.48743 5.56195 8.25343 5.65295 7.99343 5.65295C7.72043 5.65295 7.49943 5.56195 7.31743 5.39295C7.13543 5.21095 7.04443 4.97695 7.04443 4.71695C7.04443 4.44395 7.13543 4.22295 7.31743 4.05395C7.49943 3.87195 7.72043 3.79395 7.99343 3.79395ZM7.30443 6.48495H8.68243V13.2059H7.30443V6.48495Z" fill="white"/>
-                            </svg> 
+                        <div style="padding-left: 31px; padding-right: 31px; padding-top: 6.50px; padding-bottom: 6.50px; background: var(--bgcolor4); border-radius: 18px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
+                            <div style="color: white; font-size: 16px;  font-weight: 500; word-wrap: break-word">荣誉榜</div>
                         </div>
                         </div>
-                    </div>
-                    </div>
-
-                    <!--二级tab-->
-                    <div style="padding-left: 13.50px; padding-right: 13.50px; left: 0px; top: 0px; position: absolute; justify-content: center; align-items: flex-start; display: inline-flex">
-                    <div style="height: 41px; padding-left: 32px; padding-right: 32px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                        <div style="padding-top: 11.50px; padding-bottom: 11.50px; justify-content: center; align-items: center; gap: 5px; display: inline-flex">
-                        <div style="color: #FFFF7D; font-size: 16px; font-family: PingFang SC; font-weight: 500; line-height: 16px; word-wrap: break-word">主播榜单</div>
-                        </div>
-                        <div style="width: 100px; height: 2px; background: #FFFF7D"></div>
-                    </div>
-                    <div style="height: 41px; padding-left: 32px; padding-right: 32px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                        <div style="padding-top: 11.50px; padding-bottom: 11.50px; justify-content: center; align-items: center; gap: 5px; display: inline-flex">
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">主播榜单</div>
-                        </div>
-                        <div style="width: 100px; height: 2px; background: rgba(255, 255, 255, 0)"></div>
-                    </div>
-                    </div>      
-
-                    <!--分割线-->
-                    <div style="width: 355px; height: 1px; left: 0px; top: 41px; position: absolute; background: var(--bgcolor1)"></div>
-
-                    <!--活动说明&日期选择器-->
-                    <div style="width: 355px; height: 51px; left: 0px; top: 42.50px; position: absolute">
-                    <div style="padding-top: 7px; padding-bottom: 7px; left: 10px; top: 11px; position: absolute; justify-content: flex-start; align-items: flex-start; gap: 5px; display: inline-flex">
-                        <div style="color: white; font-size: 14px; font-family: PingFang SC; font-weight: 500; line-height: 14px; word-wrap: break-word">活动期间榜单每日24:00结算</div>
-                    </div>
-                    <div style="width: 105px; height: 85px; left: 240px; top: 11px; position: absolute; background: var(--bgcolor4); border-radius: 14px; overflow: hidden">
-                        <div style="width: 105px; height: 28.50px; left: 0px; top: 56.50px; position: absolute">
-                        <div style="left: 11.50px; top: 4px; position: absolute; color: white; font-size: 14px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">05月05日</div>
-                        </div>
-                        <div style="width: 105px; height: 29px; left: 0px; top: 27.50px; position: absolute; background: var(--bgcolor3)">
-                        <div style="width: 105px; height: 1px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor1)"></div>
-                        <div style="width: 62px; height: 14px; left: 21.50px; top: 7.50px; position: absolute">
-                            <div style="left: -10px; top: 0px; position: absolute; color: white; font-size: 14px; font-family: PingFang SC; font-weight: 500; line-height: 14px; word-wrap: break-word">05月06日</div>
-                        </div>
-                        <div style="width: 105px; height: 1px; left: 0px; top: 28px; position: absolute; background: var(--bgcolor1)"></div>
-                        </div>
-                        <div style="width: 105px; height: 27.50px; left: 0px; top: 0px; position: absolute">
-                        <div style="width: 11px; height: 11px; left: 84px; top: 0px; position: absolute">
-                            <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10.607 5.3033L5.30371 10.6066L0.000410169 5.3033H10.607Z" fill="white"/>
-                            </svg>                  
-                        </div>
-                        <div style="left: 11.50px; top: 3.50px; position: absolute; color: white; font-size: 14px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">05月07日</div>
-                        </div>
-                    </div>
-                    </div>
 
                     </div>
-                    
-                    <!--滚动条-->
-                    <div style="width: 8px; height: 250px; background: var(--bgcolor4); border-radius: 4px"></div>
+                    </div>
                 </div>
-
-                <div style="left: -0.50px; top: -0.50px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 61px; display: inline-flex">
-                    <div style="width: 375px; padding-top: 9px; justify-content: center; align-items: flex-start; gap: 216px; display: inline-flex">
-                    <div style="padding-left: 11.50px; padding-right: 11.50px; padding-top: 1px; padding-bottom: 1px; background: var(--bgcolor3); border-radius: 10px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
-                        <div style="color: white; font-size: 12px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">5.30~6.1</div>
-                    </div>
-                    <div style="justify-content: flex-start; align-items: flex-start; gap: 5px; display: flex">
-                        <div style="width: 30px; height: 30px; position: relative">
-                        <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="0.5" y="0.5" width="30" height="30" rx="15" fill="black" fill-opacity="0.8"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.125 15.75C9.125 12.1059 12.159 9.125 15.9351 9.125C18.5738 9.125 20.8543 10.5832 21.9854 12.7059L20.8591 12.0916C20.4955 11.8932 20.0399 12.0272 19.8416 12.3909C19.6432 12.7545 19.7772 13.2101 20.1409 13.4084L22.8909 14.9084C23.0827 15.0131 23.3107 15.0288 23.5151 14.9516C23.7196 14.8743 23.8802 14.7117 23.9548 14.5063L24.9548 11.7563C25.0964 11.367 24.8956 10.9367 24.5063 10.7952C24.117 10.6536 23.6867 10.8544 23.5452 11.2437L23.1701 12.2752C21.854 9.6636 19.1041 7.875 15.9351 7.875C11.4986 7.875 7.875 11.386 7.875 15.75C7.875 20.114 11.4986 23.625 15.9351 23.625C18.8067 23.625 21.3327 22.1566 22.7608 19.9401C22.9478 19.6499 22.8641 19.2631 22.5739 19.0762C22.2838 18.8892 21.897 18.9729 21.71 19.2631C20.5075 21.1295 18.3735 22.375 15.9351 22.375C12.159 22.375 9.125 19.3941 9.125 15.75Z" fill="white"/>
-                        </svg>
-                        </div>
-                        <div style="width: 30px; height: 30px; position: relative">
-                        <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="0.5" y="0.5" width="30" height="30" rx="15" fill="black" fill-opacity="0.8"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M20.9325 8.94185C21.1766 8.69777 21.5723 8.69777 21.8164 8.94185C22.0605 9.18593 22.0605 9.58165 21.8164 9.82573L16.513 15.1291L21.8163 20.4324C22.0604 20.6764 22.0604 21.0722 21.8163 21.3162C21.5722 21.5603 21.1765 21.5603 20.9324 21.3162L15.6292 16.013L10.3259 21.3162C10.0818 21.5603 9.6861 21.5603 9.44202 21.3162C9.19795 21.0721 9.19795 20.6764 9.44202 20.4323L20.9325 8.94185ZM14.8261 14.3261C15.0701 14.082 15.0701 13.6863 14.8261 13.4422L10.3257 8.94185C10.0817 8.69777 9.68592 8.69777 9.44185 8.94185C9.19777 9.18593 9.19777 9.58165 9.44185 9.82573L13.9422 14.3261C14.1863 14.5701 14.582 14.5701 14.8261 14.3261Z" fill="white"/>
-                        </svg>
-                        </div>
-                    </div>
-                    </div>
-                    <div style="width: 375px; justify-content: center; align-items: center; gap: 13px; display: inline-flex">
-                    <div style="padding-left: 31px; padding-right: 31px; padding-top: 6.50px; padding-bottom: 6.50px; background: #FDA11D; border-radius: 18px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">主播榜</div>
-                    </div>
-                    <div style="padding-left: 31px; padding-right: 31px; padding-top: 6.50px; padding-bottom: 6.50px; background: var(--bgcolor4); border-radius: 18px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">粉丝榜</div>
-                    </div>
-                    <div style="padding-left: 31px; padding-right: 31px; padding-top: 6.50px; padding-bottom: 6.50px; background: var(--bgcolor4); border-radius: 18px; overflow: hidden; justify-content: center; align-items: center; gap: 5px; display: flex">
-                        <div style="color: white; font-size: 16px; font-family: PingFang SC; font-weight: 500; word-wrap: break-word">荣誉榜</div>
-                    </div>
-                    </div>
-
-                </div>
-                </div>
-            </div>
-        </div>
-
-        <div style="width: 1150px; height: 250px; top: 10px; left:0px; display: flex; justify-content: space-between; position: relative ">
-        <!--配色表1-->
-        <div style="width: 450px; height: 300px; top: 10px; left:12px;">
-            <div style="width: 420px; height: 22px; top: 10px; left:10px; font-size:20px;font-weight: 600; display: flex; justify-content: left; position: relative" >插件配色表</div>
-            <div style="width: 420px; height: 30px; top: 10px; left:0px;display: flex; justify-content: left; position: relative" class="text-3" >（红色部分为固定色值）</div>
-            <div style="width: 420px; height: 60px; top: 10px; left:10px; display: flex; justify-content:left; position: relative">
-            <div class="color-box" style="background: #ffffff;"></div>
-            <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1" style="opacity: 0.5;">fontColor1：普通文字颜色 </div>
-                <div> <span class="text-3">#ffffff </span> </div>
-            </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 5px; left:10px; display: flex; justify-content:left; position: relative">
-            <div class="color-box" style="background: #ffff7d;"></div>
-            <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1" style="opacity: 0.5;">fontColor2：强调文字颜色（昵称、标题、称号） </div>
-                <div> <span class="text-3">#ffff7d </span> </div>
-            </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 5px; left:10px; display: flex; justify-content:left; position: relative">
-            <div class="color-box" style="background: #ffff7d;"></div>
-            <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1" style="opacity: 0.5;">fontColor3：辅助文字颜色 </div>
-                <div> <span class="text-3">#ffff7d </span> </div>
-            </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 5px; left:10px; display: flex; justify-content:left; position: relative">
-            <div class="color-box" style="background: #07082c;"></div>
-            <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1" style="opacity: 0.5;">fontColor4：辅助文字颜色 </div>
-                <div> <span class="text-3">#07082c </span> </div>
-            </div>
-            </div>
-        </div>
-
-        <!--配色表2-->
-        <div style="width: 450px; height: 300px; top: 10px; left:12px;">
-            <div style="width: 420px; height: 52px; top: 10px; left:10px; font-size:20px;font-weight: 600; display: flex; justify-content: left; position: relative" ></div>
-            <div style="width: 420px; height: 60px; top: 15px; left:10px; display: flex; justify-content:left; position: relative">
-            <div id="color-box5" class="color-box color-1 "></div>
-            <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1">bgcolor2：表头色、表格边框色 </div>
-                <div> <span id="colorValue5"  class="text-2"> #778bee</span> </div>
-            </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 5px; left:10px; display: flex; justify-content:left; position: relative">
-            <div id="color-box6" class="color-box color-3 "></div>
-            <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1">bgcolor3：表格背景色 </div>
-                <div> <span id="colorValue6" class="text-2">#4b62d2</span> </div>
-            </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 5px; left:10px; display: flex; justify-content:left; position: relative">
-            <div id="color-box7" class="color-box color-4 "></div>
-            <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1">bgcolor4：进度条底色、活动时间底色 </div>
-                <div> <span id="colorValue7"  class="text-2"> #182c8b</span> </div>
-            </div>
-            </div>
-            <div style="width: 420px; height: 50px; top: 5px; left:10px; display: flex; justify-content:left; position: relative">
-            <div class="color-box" style="background:rgba(7,8,44,0.9);"></div>
-            <div style="top: 0px; left:20px; position: relative">
-                <div class="text-1" style="opacity: 0.5;">tipBgColor：tip背景色（带透明度） </div>
-                <div> <span class="text-3">rgba(7,8,44,0.9) </span> </div>
-            </div>
-            </div>
-        </div>
-
-        <!--表格-->
-        <div style="width: 300px; height: 300px; top: 10px; left:12px;">
-            <div style="width: 200px; height: 52px; top: 10px; left:10px; font-size:20px;font-weight: 600; display: flex; justify-content: left; position: relative" ></div>
-            <div style="width: 230px; height: 84px; position: relative; background: var(--bgcolor3); border-radius: 10px">
-            <div style="width: 212px; height: 34px; left: 9px; top: 0px; position: absolute">
-                <div style="left: 64px; top: 7px; position: absolute; color: white; font-size: 14px; font-family: PingFang SC; font-weight: 600; word-wrap: break-word">主播每日任务</div>
-            </div>
-            <div style="width: 212px; height: 36px; left: 9px; top: 34px; position: absolute">
-                <div style="width: 44px; height: 18px; left: 0px; top: 0px; position: absolute; background: var(--bgcolor1); border: 1px var(--bgcolor1) solid; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-                <div style="color: white; font-size: 14px; font-family: PingFang SC; font-weight: 500; line-height: 14px; word-wrap: break-word">等级</div>
-                </div>
-                <div style="width: 58px; height: 18px; left: 44px; top: 0px; position: absolute; background: var(--bgcolor1); border: 1px var(--bgcolor1) solid; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-                <div style="color: white; font-size: 14px; font-family: PingFang SC; font-weight: 500; line-height: 14px; word-wrap: break-word">华丽值</div>
-                </div>
-                <div style="width: 110px; height: 18px; left: 102px; top: 0px; position: absolute; background: var(--bgcolor1); border: 1px var(--bgcolor1) solid; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-                <div style="color: white; font-size: 14px; font-family: PingFang SC; font-weight: 500; line-height: 14px; word-wrap: break-word">奖励</div>
-                </div>
-                <div style="width: 44px; height: 18px; left: 0px; top: 18px; position: absolute; border: 1px var(--bgcolor1) solid; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-                <div style="color: white; font-size: 14px; font-family: PingFang SC; font-weight: 500; line-height: 14px; word-wrap: break-word">Lv1</div>
-                </div>
-                <div style="width: 58px; height: 18px; left: 44px; top: 18px; position: absolute; border: 1px var(--bgcolor1) solid; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-                <div style="color: white; font-size: 14px; font-family: PingFang SC; font-weight: 500; line-height: 14px; word-wrap: break-word">999</div>
-                </div>
-                <div style="width: 110px; height: 18px; left: 102px; top: 18px; position: absolute; border: 1px var(--bgcolor1) solid; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-                <div style="color: white; font-size: 14px; font-family: PingFang SC; font-weight: 500; line-height: 14px; word-wrap: break-word">壁纸(花间派对)</div>
-                </div>
-            </div>
-            </div>
-        </div>
-        </div>
-
-
-    </div>
-
-    <div style="width: 1150px; height: 80px; top: 0px; left:0px; display: flex; justify-content: space-between;  position:relative; background: #e9e9e9;">
-        <div style="width: 600px; height: 80px; top: 10px; left:10px; display: flex; justify-content: left;  position:relative ">
-            <!--颜色选择和预览-->
-            <div style="width: 200px; height: 60px; top:5px; display: flex; justify-content: left; position: relative">
-            <div class="text-1">选择主题色：<br> <span id="colorText">#293da3</span></div>
-            <input type="color" value="#293da3" id="colorPicker" class="color-box2" onchange="updateColorValue()"><!--主题色选择-->
             </div>
             
-            <div style="width: 180px; height: 200px;left:10px ">
+            <!--插件配色表-->
+            <div style="width: 400px; height: 640px; margin: 10px;">
+                <div style="width:auto; height: 22px; padding: 4px;  font-size:20px;font-weight: 600; display: flex; justify-content: left; align-items:baseline;" >
+                    插件配色表<span class="text-3" >（红色部分为固定色值）</span>
+                </div>
+                <div style="width: 1150px; display: flex; justify-content: left;position: relative; ">
+                    <!--详细1-->
+                    <div style="width: auto; margin: 10px 10px 10px 4px;">
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                        <div class="color-box" style="background: #ffffff;"></div>
+                        <div style="margin-left: 10px;">
+                            <div class="text-1" style="opacity: 0.5; height: 20px">fontColor1：普通文字颜色 </div>
+                            <span class="text-3">#ffffff </span>
+                        </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                        <div class="color-box" style="background: #ffff7d;"></div>
+                        <div style="margin-left: 10px;">
+                            <div class="text-1" style="opacity: 0.5; height: 20px">fontColor2：强调文字颜色（昵称、标题、称号） </div>
+                            <span class="text-3">#ffff7d </span>
+                        </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                        <div class="color-box" style="background: #ffff7d;"></div>
+                        <div style="margin-left: 10px;">
+                            <div class="text-1" style="opacity: 0.5; height: 20px">fontColor3：辅助文字颜色 </div>
+                            <span class="text-3">#ffff7d </span>
+                        </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                        <div class="color-box" style="background: #07082c;"></div>
+                        <div style="margin-left: 10px;">
+                            <div class="text-1" style="opacity: 0.5; height: 20px">fontColor4：辅助文字颜色 </div>
+                            <span class="text-3">#07082c </span>
+                        </div>
+                        </div>
+                    </div>
+                    <!--详细2-->
+                    <div style="width: auto; margin: 10px;">
+                        
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                        <div id="color-box5" class="color-box color-1 "></div>
+                        <div style="margin-left: 10px;">
+                            <div class="text-1" style="height: 20px;">bgcolor2：表头色、表格边框色 </div>
+                            <span id="colorValue5"  class="text-2"> #778bee</span>
+                        </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                        <div id="color-box6" class="color-box color-3 "></div>
+                        <div style="margin-left: 10px;">
+                            <div class="text-1" style="height: 20px;">bgcolor3：表格背景色 </div>
+                            <span id="colorValue6" class="text-2">#4b62d2</span>
+                        </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                        <div id="color-box7" class="color-box color-4 "></div>
+                        <div style="margin-left: 10px;">
+                            <div class="text-1" style="height: 20px;">bgcolor4：进度条底色、活动时间底色 </div>
+                            <span id="colorValue7"  class="text-2"> #182c8b</span>
+                        </div>
+                        </div>
+                        <div style="width: auto; height: 50px; display: flex; justify-content:left; align-items: center;">
+                        <div class="color-box" style="background:rgba(7,8,44,0.9);"></div>
+                        <div style="margin-left: 10px;">
+                            <div class="text-1" style="opacity: 0.5; height: 20px">tipBgColor：tip背景色（带透明度） </div>
+                            <span class="text-3">rgba(7,8,44,0.9) </span>
+                        </div>
+                        </div>
+                    </div>
+                    <!--表格示意-->
+                    <div style="width: 350px; display: flex; justify-content: center; position: relative;">
+                        <div style="width: 230px; height: 84px;margin: 10px; background: var(--bgcolor3); border-radius: 10px; color: white; font-size: 14px;  font-weight: 500; text-align: center;">
+                            <div style="height: 4px;"></div>
+                            <div style=" width: 230px; display: flex; justify-content: center; align-items: center;">主播每日任务</div>
+                            <div style=" width: 230px; display: flex; justify-content: center;">
+                                <div style="width: 44px; height: 20px;  background: var(--bgcolor1); border: 1px var(--bgcolor1) solid; justify-content: center; align-items: center;">等级</div>
+                                <div style="width: 58px; height: 20px;  background: var(--bgcolor1); border: 1px var(--bgcolor1) solid; justify-content: center; align-items: center;">华丽值</div>                               
+                                <div style="width: 110px; height: 20px;  background: var(--bgcolor1); border: 1px var(--bgcolor1) solid; justify-content: center; align-items: center;">奖励</div>                               
+                            </div>
+                            <div style=" width: 230px; display: flex; justify-content: center;">
+                                <div style="width: 44px; height: 20px; border: 1px var(--bgcolor1) solid; justify-content: center; align-items: center;">Lv1</div>                               
+                                <div style="width: 58px; height: 20px; border: 1px var(--bgcolor1) solid; justify-content: center; align-items: center;">999</div>                              
+                                <div style="width: 110px; height: 20px;border: 1px var(--bgcolor1) solid; justify-content: center; align-items: center;">壁纸(花间派对)</div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            
+        </div>
+    </div>
+    <!--菜单栏-->
+    <div style="width: 920px; height: 80px; display: flex; justify-content: space-between;  position:relative; background: #e9e9e9;">
+        <div style="width: auto; height: 200px;margin: 10px; ">               
             <!--上传背景图-->
-            <div style="width: 350px; height: 24px; top: 5px;display: flex; justify-content: space-between; position: relative">
+            <div style="width: 350px; height: 24px; top: 5px;display: flex; justify-content: left; ">
                 <div class="text-1">上传背景图：</div>
                 <input type="file" id="imageInput" >
             </div>
@@ -841,15 +948,31 @@
             <div style="width: 350px; height: 24px; top: 10px;display: flex; justify-content: space-between; position: relative">
                 <div class="text-1">上传标题图：</div>
                 <input type="file" id="imageInput2" >
+            </div> 
+        </div>
+        <div style="width: 600px; height: 80px;padding: 10px; display: flex; justify-content: left;  position:relative ">
+            <!--颜色选择和预览-->
+            <div style=" display: flex; justify-content:right; position: relative; margin-left: 4px;">
+                <input type="text" id="colorValue" value="#293da3" style="width:60px; height:26px; border-radius: 4px; border:1px solid #727272; ">
+                <div style="width: 51px; height: 26px; border:1px solid #727272; border-radius: 6px;">
+                    <input type="color" value="#293da3" id="colorPicker" style="width: 30px; height:26px; border-radius: 4px 0px 0px 4px; border:1px solid #727272;" oninput="updateColorValue()"><!--主题色选择-->
+                    <div class="tips2" style="position: absolute;">        
+                    <span class="tips2text" style="font-size: 10px; text-align: center;">关闭后可选择非安全色</span>
+                    <input type="checkbox" id="safaSwitch" ></input>
+                    <label for="safaSwitch" class="safa-switch" style="width: 14px; height: 19px;font-size: 10px; text-align: center; line-height: 10px;padding: 3px;border:1px solid #727272; box-shadow:0px 0px 4px #ffffff84 inset;  ">
+                        SA<br>FA
+                    </label>
+                    </div>
+                </div>
             </div>
-            </div>
+             
         </div>
 
         <!--导出与重置-->
         <div style="width: 200px; height: 40px; top:40px; display: flex; position: relative ">
             <button  onclick="exportimg()" class="button">导出</button>
             <div style="left:12px; display: flex; position: relative ">
-            <button onclick="reload()" class="button2">重置</button>
+            <!--button onclick="reload()" class="button2">重置</button-->
             </div>
         </div>
 
@@ -860,300 +983,502 @@
 
   
 
-  <script>
+<script>
 
-    //更新颜色
-    const colorPicker = document.getElementById('colorPicker');
-    const root = document.documentElement;
+//更新颜色
+const colorPicker = document.getElementById('colorPicker');
+const root = document.documentElement;
 
-    colorPicker.addEventListener('input', function() {
-      const color = colorPicker.value;
-      const hsl = rgbToHsl(hexToRgb(color));
-      
-      root.style.setProperty('--bgcolor2', `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`);
-      root.style.setProperty('--bgcolor1', `hsl(${hsl.h}, ${hsl.s * 1.3 }%, ${hsl.l + 30}%)`);
-      root.style.setProperty('--bgcolor3', `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l * 1.4}%)`);
-      root.style.setProperty('--bgcolor4', `hsl(${hsl.h}, ${hsl.s + 10 }%, ${hsl.l * 0.8}%)`);
-    });
+//颜色选择器同步换色
+colorPicker.addEventListener('input', function() {
+  var tipsset = document.getElementById("pickertips");
+  var picker = colorPicker.value ;
+  var rgb = hexToRgb(picker);
 
-    // 将16进制颜色值转换为RGB值
-    function hexToRgb(hex) {
-      const r = parseInt(hex.slice(1, 3), 16);
-      const g = parseInt(hex.slice(3, 5), 16);
-      const b = parseInt(hex.slice(5, 7), 16);
-      
-      return { r, g, b };
-    }
+  const r = parseInt(picker.slice(1, 3), 16);
+  const g = parseInt(picker.slice(3, 5), 16);
+  const b = parseInt(picker.slice(5, 7), 16);
+  
+  var max = Math.max(r,g,b)
+  var min = Math.min(r,g,b)
+  var l = (r * 299 + g * 587 + b * 114)/1000;
+  var s = (max - min)/max * 100;
 
-    // 将RGB值转换为HSL值
-    function rgbToHsl(rgb) {
-      const r = rgb.r / 255;
-      const g = rgb.g / 255;
-      const b = rgb.b / 255;
-      
-      const max = Math.max(r, g, b);
-      const min = Math.min(r, g, b);
-      
-      let h, s, l = (max + min) / 2;
-      
-      if (max === min) {
-        h = s = 0; // achromatic
-      } else {
-        const d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-        
-        switch (max) {
-          case r:
-            h = (g - b) / d + (g < b ? 6 : 0);
-            break;
-          case g:
-            h = (b - r) / d + 2;
-            break;
-          case b:
-            h = (r - g) / d + 4;
-            break;
+  //安全模式
+  var checkbox1 = document.getElementById("safaSwitch")
+  if (checkbox1.checked){
+    changeColor()
+  }else{
+    //先判断明度，再判断饱和度
+    if (l > 220){
+      darktips2()
+    }else if ( l < 50){
+      lighttips2()
+    }else if ( l <= 220 , l > 128 ){
+        var checkbox = document.getElementById("themeSwitch");
+        checkbox.checked = true;
+        if (s >= 50){ 
+        stips1()
+        } else if (s <= 10){
+          stips2()
+        } else {
+          changeColor()
         }
-        
-        h /= 6;
-      }
-      
-      return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
-    }
-
-
-    //上传背景图
-    const uploadInput = document.getElementById('imageInput');
-    const myDiv = document.getElementById('bg-img');
-    const myDiv3 = document.getElementById('bg-img2');
-
-    uploadInput.addEventListener('change', function() {
-      const file = this.files[0];
-      const reader = new FileReader();
-
-      reader.onload = function(e) {
-        myDiv.style.backgroundImage = `url(${e.target.result})`;
-        myDiv3.style.backgroundImage = `url(${e.target.result})`;
-      };
-
-      reader.readAsDataURL(file);
-    });
-
-    //上传标题图
-    const uploadInput2 = document.getElementById('imageInput2');
-    const myDiv2 = document.getElementById('title-img');
-    const myDiv4 = document.getElementById('title-img2');
-
-    uploadInput2.addEventListener('change', function() {
-      const file = this.files[0];
-      const reader = new FileReader();
-
-      reader.onload = function(e) {
-        myDiv2.style.backgroundImage = `url(${e.target.result})`;
-        myDiv4.style.backgroundImage = `url(${e.target.result})`;
-      };
-
-      reader.readAsDataURL(file);
-    });
-
-
-    //导出预览图
-    function exportimg() {
-                html2canvas(document.getElementById("export-img"),{scale: 2.5}).then(function(canvas) {
-                    var link = document.createElement('a');
-                    link.href = canvas.toDataURL();
-                    link.download = 'screenshot.png';
-                    link.click();
-                });
-            }
-
-
-    // 获取指定元素的颜色值
-    //var element1 = document.getElementById("color-box1");
-    //var color1 = window.getComputedStyle(element1).backgroundColor;
-    //var hexcolor1 = rgbToHex(color1);
-    //document.getElementById("colorValue1").textContent = hexcolor1;
-
-    //var element3 = document.getElementById("color-box3");
-    //var color3 = window.getComputedStyle(element3).backgroundColor;
-    //var hexcolor3 = rgbToHex(color3);
-    //document.getElementById("colorValue3").textContent = hexcolor3;
-
-    //var element4 = document.getElementById("color-box4");
-    //var color4 = window.getComputedStyle(element4).backgroundColor;
-    //var hexcolor4 = rgbToHex(color4);
-    //document.getElementById("colorValue4").textContent = hexcolor4;
-    
-    //var element5 = document.getElementById("color-box5");
-    //var color5 = window.getComputedStyle(element5).backgroundColor;
-    //var hexcolor5 = rgbToHex(color5);
-    //document.getElementById("colorValue5").textContent = hexcolor5;
-
-    //var element6 = document.getElementById("color-box6");
-    //var color6 = window.getComputedStyle(element6).backgroundColor;
-    //var hexcolor6 = rgbToHex(color6);
-    //document.getElementById("colorValue6").textContent = hexcolor6;
-
-    //var element7 = document.getElementById("color-box7");
-    //var color7 = window.getComputedStyle(element7).backgroundColor;
-    //var hexcolor7 = rgbToHex(color7);
-    //document.getElementById("colorValue7").textContent = hexcolor7;
-    
-
-
-    function hslToHex(hslColor) {
-      const hslValues = hslColor.match(/\d+/g).map(Number);
-      const [h, s, l] = hslValues;
-      const hslToRgb = (h, s, l) => {
-        h = h % 360;
-        s /= 100;
-        l /= 100;
-        const c = (1 - Math.abs(2 * l - 1)) * s;
-        const x = c * (1 - Math.abs((h / 60) % 2 - 1));
-        const m = l - c / 2;
-        let r, g, b;
-        if (h >= 0 && h < 60) {
-          r = c;
-          g = x;
-          b = 0;
-        } else if (h >= 60 && h < 120) {
-          r = x;
-          g = c;
-          b = 0;
-        } else if (h >= 120 && h < 180) {
-          r = 0;
-          g = c;
-          b = x;
-        } else if (h >= 180 && h < 240) {
-          r = 0;
-          g = x;
-          b = c;
-        } else if (h >= 240 && h < 300) {
-          r = x;
-          g = 0;
-          b = c;
-        } else if (h >= 300 && h < 360) {
-          r = c;
-          g = 0;
-          b = x;
+    }else {
+        var checkbox = document.getElementById("themeSwitch");
+        checkbox.checked = false;
+        if (s >= 78){ 
+          stips1()
+        } else if (s <= 18){
+          stips2()
+        } else {
+          changeColor()
         }
-        return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
-      };
+    }
+  }
 
-      const rgbToHex = (r, g, b) => {
-        return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-      };
+});
 
-      const [r, g, b] = hslToRgb(h, s, l);
-      return rgbToHex1(r, g, b);
+
+//符合条件则换色
+function changeColor(){
+    var checkbox = document.getElementById("themeSwitch")
+        if (checkbox.checked) {
+        colordark();
+        } else {
+        colorlight();
+        };
     }
 
-    function rgbToHex1(rgb) {
-      // 将RGB颜色值分割为红、绿、蓝三个部分
-      var rgbArray = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-      var red = parseInt(rgbArray[1]);
-      var green = parseInt(rgbArray[2]);
-      var blue = parseInt(rgbArray[3]);
+//亮字色主题
+function colorlight(){
+    const color = colorPicker.value;
+    const hsl = rgbToHsl(hexToRgb(color));
+    document.documentElement.style.setProperty('--color3','hsl(0,0%,100%)');
+    root.style.setProperty('--bgcolor2', `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`);
+    root.style.setProperty('--bgcolor1', `hsl(${hsl.h}, ${hsl.s * 1.3 }%, ${hsl.l + 30}%)`);
+    root.style.setProperty('--bgcolor3', `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l + 16}%)`);
+    root.style.setProperty('--bgcolor4', `hsl(${hsl.h}, ${hsl.s * 0.9 }%, ${hsl.l - 8}%)`);
+}
+//暗字色主题
+function colordark(){
+    const color = colorPicker.value;
+    const hsl = rgbToHsl(hexToRgb(color));
+    document.documentElement.style.setProperty('--color3','hsl(0,0%,0%)');
+    root.style.setProperty('--bgcolor2', `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`);
+    root.style.setProperty('--bgcolor1', `hsl(${hsl.h}, ${hsl.s * 0.9 }%, ${hsl.l - 30}%)`);
+    root.style.setProperty('--bgcolor3', `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l - 40}%)`);
+    root.style.setProperty('--bgcolor4', `hsl(${hsl.h}, ${hsl.s * 0.9 }%, ${hsl.l - 16}%)`);
+}
 
-      // 将十进制颜色值转换为十六进制颜色值
-      var hex = "#" + ((1 << 24) | (red << 16) | (green << 8) | blue).toString(16).slice(1);
+//主题切换
+const themeSwitch = document.getElementById('themeSwitch');
+const safaSwitch = document.getElementById('safaSwitch');
 
-      return hex;
+themeSwitch.addEventListener('change', function() {
+    
+  if (this.checked) {
+    
+    var picker = colorPicker.value ;
+    var rgb = hexToRgb(picker);
+
+    const r = parseInt(picker.slice(1, 3), 16);
+    const g = parseInt(picker.slice(3, 5), 16);
+    const b = parseInt(picker.slice(5, 7), 16);
+    
+    var max = Math.max(r,g,b)
+    var min = Math.min(r,g,b)
+    var l = (r * 299 + g * 587 + b * 114)/1000;
+    var s = (max - min)/max * 100;
+
+    if (l <= 220,l >= 100){
+        document.documentElement.style.setProperty('--switch1','#c6c6c6');
+        document.documentElement.style.setProperty('--switch2','#505050');
+        colordark()
+        darktips1() 
+    }else{
+        lighttips2()
+        this.checked = false
+    }
+
+    
+  } else {
+    document.documentElement.style.setProperty('--switch1','#707070');
+    document.documentElement.style.setProperty('--switch2','#fff');
+    
+    var picker = colorPicker.value ;
+    var rgb = hexToRgb(picker);
+
+    const r = parseInt(picker.slice(1, 3), 16);
+    const g = parseInt(picker.slice(3, 5), 16);
+    const b = parseInt(picker.slice(5, 7), 16);
+    
+    var max = Math.max(r,g,b)
+    var min = Math.min(r,g,b)
+    var l = (r * 299 + g * 587 + b * 114)/1000;
+    var s = (max - min)/max * 100;
+
+    if (l <= 128 , l>=50){
+        colorlight()
+        lighttips1()
     }
     
-    function rgbToHex2(color) {
-        // 将RGB颜色字符串转换为数组
-        var rgb = color.match(/\d+/g);
+  }
+});
+//安全模式（默认开启）
+safaSwitch.addEventListener('change', function() {
+  if (this.checked) {
+    document.documentElement.style.setProperty('--switch3','#909090');
+    document.documentElement.style.setProperty('--switch4','#c0c0c0');
+  } else {
+    document.documentElement.style.setProperty('--switch3','#000000');
+    document.documentElement.style.setProperty('--switch4','#e3ca26');
+  }
+});
 
-        // 将RGB值转换为16进制，并拼接成hex色值
-        var hexColor = '#' + Number(rgb[0]).toString(16) + Number(rgb[1]).toString(16) + Number(rgb[2]).toString(16);
-
-        return hexColor;
-    }
-      
-
-    //显示所选色值
-    const colorText = document.getElementById("colorText");
-    const colorPicker2 = document.getElementById("colorPicker");
-
-    colorPicker2.addEventListener("change", function() {
-      colorText.textContent = colorPicker2.value;
-    });
-
-    const colorText2 = document.getElementById("colorText2");
-    const colorPicker3 = document.getElementById("colorPicker");
-
-    colorPicker3.addEventListener("change", function() {
-      colorText2.textContent = colorPicker3.value;
-    });
-
-    //更新颜色
-    const colorPicker4 = document.getElementById("colorPicker");
-    colorPicker4.addEventListener("change", function() {
-
-    var element1 = document.getElementById("color-box1");
-    var color1 = window.getComputedStyle(element1).backgroundColor;
-    var hexcolor1 = rgbToHex1(color1);
-    document.getElementById("colorValue1").textContent = hexcolor1;
-
-    var element3 = document.getElementById("color-box3");
-    var color3 = window.getComputedStyle(element3).backgroundColor;
-    var hexcolor3 = rgbToHex1(color3);
-    document.getElementById("colorValue3").textContent = hexcolor3;
-
-    var element4 = document.getElementById("color-box4");
-    var color4 = window.getComputedStyle(element4).backgroundColor;
-    var hexcolor4 = rgbToHex1(color4);
-    document.getElementById("colorValue4").textContent = hexcolor4;
-
-    var element5 = document.getElementById("color-box5");
-    var color5 = window.getComputedStyle(element5).backgroundColor;
-    var hexcolor5 = rgbToHex1(color5);
-    document.getElementById("colorValue5").textContent = hexcolor5;
-
-    var element6 = document.getElementById("color-box6");
-    var color6 = window.getComputedStyle(element6).backgroundColor;
-    var hexcolor6 = rgbToHex1(color6);
-    document.getElementById("colorValue6").textContent = hexcolor6;
-
-    var element7 = document.getElementById("color-box7");
-    var color7 = window.getComputedStyle(element7).backgroundColor;
-    var hexcolor7 = rgbToHex1(color7);
-    document.getElementById("colorValue7").textContent = hexcolor7;
-
-    });
+var clickCount = 0
+//亮字色切换提示--有限次数
+function lighttips1(){
+  if (clickCount >= 4 ){return}
+  var object = document.getElementById('pickertips');
+    object.style.display = "block";
+    object.style.animation = "tipsPickup 1s forwards";
+    object.innerHTML = "当前使用【亮字色】模式~";
+    setTimeout(function(){
+      object.style.display = "none";      
+    },1000);
+    clickCount++;
+}
+//颜色过暗提示
+function lighttips2(){
+  var object = document.getElementById('pickertips');
+    object.style.display = "block";
+    object.style.animation = "tipsPickup 1s forwards";
+    object.innerHTML = "！！所选颜色过暗！！";
+    setTimeout(function(){
+      object.style.display = "none";      
+    },1000);
+}
+//亮字色模式生效提示
+function lighttips(){
+  var object = document.getElementById('pickertips');
+    object.style.display = "block";
+    object.style.animation = "tipsPickup 1s forwards";
+    object.innerHTML = "当前使用【亮字色】模式~";
+    setTimeout(function(){
+      object.style.display = "none";      
+    },1000);
     
-    //重置
-    function reload(){
-        document.documentElement.style.setProperty('--bgcolor1','hsl(230,78%,70%)');
-        document.documentElement.style.setProperty('--bgcolor2','hsl(230,60%,40%)');
-        document.documentElement.style.setProperty('--bgcolor3','hsl(230,60%,56%');
-        document.documentElement.style.setProperty('--bgcolor4','hsl(230,70%,32%)');
-        document.getElementById("imageInput").value = "";
-        document.getElementById("imageInput2").value = "";
+}
 
-        colorPicker.value = "#293da3";
-        colorText.textContent = "#293da3";
-        colorText2.textContent = "#293da3";
-        colorValue1.textContent = "#778bee";
-        colorValue3.textContent = "#4b62d2";
-        colorValue4.textContent = "#182c8b";
-        colorValue5.textContent = "#778bee";
-        colorValue6.textContent = "#4b62d2";
-        colorValue7.textContent = "#182c8b";
+//暗字色切换提示--有限次数
+function darktips1(){
+  if (clickCount >= 4 ){return}
+  var object = document.getElementById('pickertips');
+    object.style.display = "block";
+    object.style.animation = "tipsPickup 1s forwards";
+    object.innerHTML = "当前使用【暗字色】模式~";
+    setTimeout(function(){
+      object.style.display = "none";      
+    },1000);
+    clickCount++;
+}
+//颜色过亮提示
+function darktips2(){
+  var object = document.getElementById('pickertips');
+    object.style.display = "block";
+    object.style.animation = "tipsPickup 1s forwards";
+    object.innerHTML = "！！所选颜色过亮！！";
+    setTimeout(function(){
+      object.style.display = "none";      
+    },1000);
+}
+//暗字色模式生效提示
+function darktips(){  
+  var object = document.getElementById('pickertips');
+    object.style.display = "block";
+    object.style.animation = "tipsPickup 1s forwards";
+    object.innerHTML = "当前使用【暗字色】模式~";
+    setTimeout(function(){
+      object.style.display = "none";      
+    },1000);  
+}
 
-        var bgElement1 = document.getElementById("bg-img");
-        bgElement1.style.backgroundImage = 'url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/3abd2d48548fb5f6829e66c5a41ac51914164f96/img/banner_bg.png)';
+//颜色过纯提示
+function stips1(){
+  var object = document.getElementById('pickertips');
+    object.style.display = "block";
+    object.style.animation = "tipsPickup 1s forwards";
+    object.innerHTML = "！！所选颜色过纯！！";
+    setTimeout(function(){
+      object.style.display = "none";      
+    },1000);
+}
+//颜色过灰提示
+function stips2(){
+  var object = document.getElementById('pickertips');
+    object.style.display = "block";
+    object.style.animation = "tipsPickup 1s forwards";
+    object.innerHTML = "！！所选颜色过灰！！";
+    setTimeout(function(){
+      object.style.display = "none";      
+    },1000);
+}
 
-        var bgElement2 = document.getElementById("bg-img2");
-        bgElement2.style.backgroundImage = 'url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/3abd2d48548fb5f6829e66c5a41ac51914164f96/img/banner_bg.png)';
+//显示色值
+function updateColorValue() {
+        var colorPicker = document.getElementById("colorPicker");
+        var colorValue = document.getElementById("colorValue");
+        colorValue.value = colorPicker.value;
+    }
 
-        var bgElement3 = document.getElementById("title-img");
-        bgElement3.style.backgroundImage = 'url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/3abd2d48548fb5f6829e66c5a41ac51914164f96/img/banner_title.png)';
+// 将16进制颜色值转换为RGB值
+function hexToRgb(hex) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    
+    return { r, g, b };
+}
 
+// 将RGB值转换为HSL值
+function rgbToHsl(rgb) {
+    const r = rgb.r / 255;
+    const g = rgb.g / 255;
+    const b = rgb.b / 255;
+    
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    
+    let h, s, l = (max + min) / 2;
+    
+    if (max === min) {
+    h = s = 0; // achromatic
+    } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    
+    switch (max) {
+        case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+        case g:
+        h = (b - r) / d + 2;
+        break;
+        case b:
+        h = (r - g) / d + 4;
+        break;
+    }
+    
+    h /= 6;
+    }
+    
+    return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+}
+
+function hslToHex(hslColor) {
+    const hslValues = hslColor.match(/\d+/g).map(Number);
+    const [h, s, l] = hslValues;
+    const hslToRgb = (h, s, l) => {
+    h = h % 360;
+    s /= 100;
+    l /= 100;
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+    const m = l - c / 2;
+    let r, g, b;
+    if (h >= 0 && h < 60) {
+        r = c;
+        g = x;
+        b = 0;
+    } else if (h >= 60 && h < 120) {
+        r = x;
+        g = c;
+        b = 0;
+    } else if (h >= 120 && h < 180) {
+        r = 0;
+        g = c;
+        b = x;
+    } else if (h >= 180 && h < 240) {
+        r = 0;
+        g = x;
+        b = c;
+    } else if (h >= 240 && h < 300) {
+        r = x;
+        g = 0;
+        b = c;
+    } else if (h >= 300 && h < 360) {
+        r = c;
+        g = 0;
+        b = x;
+    }
+    return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+    };
+
+    const rgbToHex = (r, g, b) => {
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+    };
+
+    const [r, g, b] = hslToRgb(h, s, l);
+    return rgbToHex1(r, g, b);
+}
+
+function rgbToHex1(rgb) {
+    // 将RGB颜色值分割为红、绿、蓝三个部分
+    var rgbArray = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    var red = parseInt(rgbArray[1]);
+    var green = parseInt(rgbArray[2]);
+    var blue = parseInt(rgbArray[3]);
+
+    // 将十进制颜色值转换为十六进制颜色值
+    var hex = "#" + ((1 << 24) | (red << 16) | (green << 8) | blue).toString(16).slice(1);
+
+    return hex;
+}
+
+function rgbToHex2(color) {
+    // 将RGB颜色字符串转换为数组
+    var rgb = color.match(/\d+/g);
+
+    // 将RGB值转换为16进制，并拼接成hex色值
+    var hexColor = '#' + Number(rgb[0]).toString(16) + Number(rgb[1]).toString(16) + Number(rgb[2]).toString(16);
+
+    return hexColor;
+}
+ 
+
+//上传背景图
+const uploadInput = document.getElementById('imageInput');
+const myDiv = document.getElementById('bg-img');
+const myDiv3 = document.getElementById('bg-img2');
+
+uploadInput.addEventListener('change', function() {
+    const file = this.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+    myDiv.style.backgroundImage = `url(${e.target.result})`;
+    myDiv3.style.backgroundImage = `url(${e.target.result})`;
+    };
+
+    reader.readAsDataURL(file);
+});
+
+//上传标题图
+const uploadInput2 = document.getElementById('imageInput2');
+const myDiv2 = document.getElementById('title-img');
+const myDiv4 = document.getElementById('title-img2');
+
+uploadInput2.addEventListener('change', function() {
+    const file = this.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+    myDiv2.style.backgroundImage = `url(${e.target.result})`;
+    myDiv4.style.backgroundImage = `url(${e.target.result})`;
+    };
+
+    reader.readAsDataURL(file);
+});
+
+
+//导出预览图
+function exportimg() {
+            html2canvas(document.getElementById("export-img"),{scale: 2.5}).then(function(canvas) {
+                var link = document.createElement('a');
+                link.href = canvas.toDataURL();
+                link.download = 'screenshot.png';
+                link.click();
+            });
         }
 
 
-  </script>
+   
+
+//显示所选色值
+
+const colorText = document.getElementById("colorText");
+const colorPicker2 = document.getElementById("colorPicker");
+
+colorPicker2.addEventListener("input", function() {
+    colorText.textContent = colorPicker2.value;
+});
+
+const colorText2 = document.getElementById("colorText2");
+const colorPicker3 = document.getElementById("colorPicker");
+
+colorPicker3.addEventListener("input", function() {
+    colorText2.textContent = colorPicker3.value;
+});
+
+//更新颜色
+const colorPicker4 = document.getElementById("colorPicker");
+colorPicker4.addEventListener("input", function() {
+
+var element1 = document.getElementById("color-box1");
+var color1 = window.getComputedStyle(element1).backgroundColor;
+var hexcolor1 = rgbToHex1(color1);
+document.getElementById("colorValue1").textContent = hexcolor1;
+
+var element3 = document.getElementById("color-box3");
+var color3 = window.getComputedStyle(element3).backgroundColor;
+var hexcolor3 = rgbToHex1(color3);
+document.getElementById("colorValue3").textContent = hexcolor3;
+
+var element4 = document.getElementById("color-box4");
+var color4 = window.getComputedStyle(element4).backgroundColor;
+var hexcolor4 = rgbToHex1(color4);
+document.getElementById("colorValue4").textContent = hexcolor4;
+
+var element5 = document.getElementById("color-box5");
+var color5 = window.getComputedStyle(element5).backgroundColor;
+var hexcolor5 = rgbToHex1(color5);
+document.getElementById("colorValue5").textContent = hexcolor5;
+
+var element6 = document.getElementById("color-box6");
+var color6 = window.getComputedStyle(element6).backgroundColor;
+var hexcolor6 = rgbToHex1(color6);
+document.getElementById("colorValue6").textContent = hexcolor6;
+
+var element7 = document.getElementById("color-box7");
+var color7 = window.getComputedStyle(element7).backgroundColor;
+var hexcolor7 = rgbToHex1(color7);
+document.getElementById("colorValue7").textContent = hexcolor7;
+
+});
+
+/*/重置
+function reload(){
+    document.documentElement.style.setProperty('--bgcolor1','hsl(230,78%,70%)');
+    document.documentElement.style.setProperty('--bgcolor2','hsl(230,60%,40%)');
+    document.documentElement.style.setProperty('--bgcolor3','hsl(230,60%,56%');
+    document.documentElement.style.setProperty('--bgcolor4','hsl(230,70%,32%)');
+    document.getElementById("imageInput").value = "";
+    document.getElementById("imageInput2").value = "";
+
+    colorPicker.value = "#293da3";
+    colorText.textContent = "#293da3";
+    colorText2.textContent = "#293da3";
+    colorValue1.textContent = "#778bee";
+    colorValue3.textContent = "#4b62d2";
+    colorValue4.textContent = "#182c8b";
+    colorValue5.textContent = "#778bee";
+    colorValue6.textContent = "#4b62d2";
+    colorValue7.textContent = "#182c8b";
+
+    var bgElement1 = document.getElementById("bg-img");
+    bgElement1.style.backgroundImage = 'url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/3abd2d48548fb5f6829e66c5a41ac51914164f96/img/banner_bg.png)';
+
+    var bgElement2 = document.getElementById("bg-img2");
+    bgElement2.style.backgroundImage = 'url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/3abd2d48548fb5f6829e66c5a41ac51914164f96/img/banner_bg.png)';
+
+    var bgElement3 = document.getElementById("title-img");
+    bgElement3.style.backgroundImage = 'url(https://raw.githubusercontent.com/YNYU01/Mini-Act-Tools/3abd2d48548fb5f6829e66c5a41ac51914164f96/img/banner_title.png)';
+
+    }*/
+
+
+</script>
 
 </body>
 </html>
